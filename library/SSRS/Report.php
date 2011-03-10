@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * php-ssrs http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @author Arron Woods <arron@idealwebsites.co.uk>
+ * @link http://code.idealwebsites.co.uk/php-ssrs/
+ * @copyright Copyright &copy; 2011 Ideal Websites Ltd
+ * @license 
+ * @version 0.1
+ */
+
 require_once('Soap/NTLM.php');
 require_once('Soap/Exception.php');
 require_once('Object/Abstract.php');
@@ -18,11 +28,6 @@ require_once('Object/Report.php');
 require_once('Object/ReportOutput.php');
 require_once('Report/Exception.php');
 
-/**
- * Description of SSRSReport
- *
- * @author Andrew Lowe
- */
 class SSRS_Report {
 
     public $servicePath = 'ReportService2010.asmx';
