@@ -5,6 +5,9 @@
  *
  * @author arron
  */
+
+require_once('ArrayIterator.php');
+
 class SSRS_Object_CatalogItems extends SSRS_Object_ArrayIterator {
 
     public $iteratorKey = 'CatalogItems';

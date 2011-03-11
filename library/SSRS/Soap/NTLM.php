@@ -143,9 +143,14 @@ class SSRS_Soap_NTLM extends SoapClient {
             curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
         }
 
-        $response = curl_exec($handle);
-        if (empty($response)) {
+	$response = curl_exec($handle);
+        if($response === false) {
             throw new SSRS_Soap_Exception('CURL error: ' . curl_error($handle), curl_errno($handle));
+        }
+
+        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        if ($httpCode !== 200){
+            throw new SSRS_Soap_Exception('HTTP error: ' . $httpCode);
         }
         curl_close($handle);
 
