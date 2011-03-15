@@ -189,7 +189,10 @@ class SSRS_Report {
      * @param boolean $recursive
      * @return SSRS_Object_CatalogItems
      */
-    public function listChildren($itemPath, $recursive = false) {
+    public function listChildren($itemPath, $recursive=false) {
+        if (!is_bool($recursive)) {
+            throw new SSRS_Report_Exception('Recursive Must Be a Boolean');
+        }
         $params = array(
             'ItemPath' => $itemPath,
             'Recursive' => $recursive

@@ -83,6 +83,21 @@ class SSRS_ReportTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($expected, $result);
     }
 
+    public function testLoadChildrenCheckRecursiveParameterIsSetAndIsBoolean() {
+        $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportService2010.wsdl', 'SoapClientMockChildren2');
+
+        $recursiveParam = true;
+
+        $soapMock->expects($this->any())
+                ->method('ListChildren')
+                ->with($this->equalTo(array('ItemPath' => '/Reports', 'Recursive' => true)));
+
+        $ssrs = new SSRS_Report('http://test/ReportServer');
+        $ssrs->setSoapService($soapMock);
+
+        $result = $ssrs->listChildren('/Reports', $recursiveParam);
+    }
+
     public function testLoadItemDefinitionsReturnsXMLStringWithInStdClass() {
         $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportService2010.wsdl', 'SoapClientMockDefinitions');
 
