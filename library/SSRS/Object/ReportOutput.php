@@ -19,7 +19,7 @@ class SSRS_Object_ReportOutput extends SSRS_Object_Abstract {
     }
 
     public function __toString(){
-        return $this->Result;
+        return (string) $this->Result;
     }
 
 }
