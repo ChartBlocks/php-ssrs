@@ -150,7 +150,7 @@ class SSRS_Soap_NTLM extends SoapClient {
 
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
         if ($httpCode !== 200){
-            throw new SSRS_Soap_Exception('HTTP error: ' . $httpCode);
+            throw new SSRS_Soap_Exception('HTTP error: ' . $httpCode . ' ' . $response, $httpCode);
         }
         curl_close($handle);
 
