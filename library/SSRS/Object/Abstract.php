@@ -19,12 +19,10 @@ class SSRS_Object_Abstract {
     }
 
     public function setData($data) {
-        if ($data instanceof stdClass) {
-            $data = get_object_vars($data);
-        }
+        $clean = $this->_sanitizeData($data);
 
-        if (is_array($data)) {
-            foreach ($data AS $key => $value) {
+        if (is_array($clean)) {
+            foreach ($clean AS $key => $value) {
                 $this->$key = $value;
             }
         }
@@ -39,6 +37,20 @@ class SSRS_Object_Abstract {
         } else {
             $this->data[$key] = $value;
         }
+    }
+
+    protected function _sanitizeData($data, $recursive = false) {
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
+
+        if ($recursive && is_array($data)) {
+            foreach ($data AS $key => $value) {
+                $data[$key] = $this->_sanitizeData($value);
+            }
+        }
+
+        return $data;
     }
 
     public function __get($key) {
