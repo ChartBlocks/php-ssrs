@@ -49,7 +49,7 @@
     <!-- PHP CodeSniffer -->
     <target name="phpcs">
         <echo msg="PHP CodeSniffer..." />
-        <exec command="phpcs --tab-width=4 --extensions=php --standard=PHPCS --report=checkstyle '${ws}/source' > '${builddir}/logs/checkstyle.xml'" escape="false" />
+        <exec command="phpcs --tab-width=4 --extensions=php --standard=Iw --report=checkstyle '${ws}/source' > '${builddir}/logs/checkstyle.xml'" escape="false" />
     </target>
 
     <!-- Unit Tests & coverage analysis -->
