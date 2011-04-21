@@ -5,9 +5,17 @@
  *
  * @author andrew
  */
-class SSRS_Object_ExecutionParameters extends SSRS_Object_ArrayIterator{
+class SSRS_Object_ExecutionParameters extends SSRS_Object_ArrayIterator {
 
     public $iteratorKey = 'Parameters';
+
+    public function __construct($data = null) {
+        parent::__construct($data);
+
+        if ($data instanceof SSRS_Object_ReportParameters) {
+            $this->setParameters($data);
+        }
+    }
 
     public function init() {
         $this->data['Parameters'] = array();
@@ -23,7 +31,7 @@ class SSRS_Object_ExecutionParameters extends SSRS_Object_ArrayIterator{
         }
     }
 
-    public function getParameterArrayForSoapCall(){
+    public function getParameterArrayForSoapCall() {
         $execParams = array();
         foreach ($this AS $parameter) {
             $execParams[] = array(
