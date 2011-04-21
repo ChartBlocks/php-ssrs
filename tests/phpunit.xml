@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<phpunit
+    strict="true"
+    stopOnError="false"
+    stopOnFailure="false"
+    stopOnIncomplete="false"
+    stopOnSkipped="false"
+    colors="false"
+    verbose="true"
+    >
+    <testsuites>
+        <testsuite name="SSRS">
+            <directory>.</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <includePath>../library</includePath>
+    </php>
+</phpunit>

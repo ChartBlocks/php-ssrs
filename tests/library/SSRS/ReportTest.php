@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../../../library/SSRS/Report.php');
+require_once('SSRS/Report.php');
 
 class SSRS_ReportTest extends PHPUnit_Framework_TestCase {
 

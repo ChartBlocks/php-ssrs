@@ -1,8 +1,8 @@
 <?php
 
-require_once('library/SSRS/Object/Abstract.php');
-require_once('library/SSRS/Object/CatalogItems.php');
-require_once('library/SSRS/Object/CatalogItem.php');
+require_once('SSRS/Object/Abstract.php');
+require_once('SSRS/Object/CatalogItems.php');
+require_once('SSRS/Object/CatalogItem.php');
 
 /**
  * Description of CatalogItemsTest

@@ -10,8 +10,8 @@
  *
  * @author Andrew Lowe
  */
-require_once('library/SSRS/Soap/NTLM.php');
-require_once('library/SSRS/Soap/Exception.php');
+require_once('SSRS/Soap/NTLM.php');
+require_once('SSRS/Soap/Exception.php');
 require_once('vfsStream/vfsStream.php');
 
 class SSRS_Soap_NTLMTest extends PHPUnit_Framework_TestCase {
