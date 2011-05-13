@@ -156,7 +156,7 @@ class SSRS_ReportTest extends PHPUnit_Framework_TestCase {
         $soapMock->expects($this->any())->method('Render2')
                 ->with($this->equalTo(array(
                             'Format' => 'HTML4.0',
-                            'DeviceInfo' => '<DeviceInfo><Toolbar>False</Toolbar></DeviceInfo>',
+                            'DeviceInfo' => '<DeviceInfo><Toolbar>false</Toolbar></DeviceInfo>',
                             'PaginationMode' => 'Estimate'
                         )));
 
@@ -164,7 +164,24 @@ class SSRS_ReportTest extends PHPUnit_Framework_TestCase {
         $ssrs->setSoapExecution($soapMock)
                 ->setSessionId($executionID);
 
-        $result = $ssrs->render('HTML4.0', 'Estimate');
+        $result = $ssrs->render('HTML4.0');
     }
+
+    public function testRenderConvertsDeviceInfo() {
+        $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportExecution2005.wsdl', 'SoapClientMockRender2');
+        $soapMock->expects($this->any())->method('Render2')
+                ->with($this->equalTo(array(
+                            'Format' => 'CSV',
+                            'DeviceInfo' => '<DeviceInfo><Toolbar>true</Toolbar><Recurse><Test>works</Test></Recurse></DeviceInfo>',
+                            'PaginationMode' => 'Another'
+                        )));
+
+        $ssrs = new SSRS_Report('http://test/ReportServer');
+        $ssrs->setSoapExecution($soapMock)
+                ->setSessionId('test');
+
+        $result = $ssrs->render('CSV', array('Toolbar' => true, 'Recurse' => array('Test' => 'works')), 'Another');
+    }
+
 
 }
