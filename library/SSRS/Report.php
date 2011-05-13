@@ -268,12 +268,13 @@ class SSRS_Report {
      * @param string $PaginationMode
      * @return SSRS_Object_ReportOutput
      */
-    public function render($format, $PaginationMode='Estimate') {
+    public function render($format, $deviceInfo = array(), $PaginationMode='Estimate') {
         $this->checkSessionId();
+        $deviceInfo = array('DeviceInfo' => array_merge(array('Toolbar' => 'false'), $deviceInfo));
 
         $renderParams = array(
             'Format' => $format,
-            'DeviceInfo' => '<DeviceInfo><Toolbar>False</Toolbar></DeviceInfo>',
+            'DeviceInfo' => $this->renderXmlOptions($deviceInfo),
             'PaginationMode' => $PaginationMode
         );
 
@@ -293,10 +294,36 @@ class SSRS_Report {
 
     /**
      * Checks to see if the Session ID is not empty and returns boolean value
-     *
+     * @return bool
      */
     public function hasValidSessionId() {
         return (!empty($this->_sessionId));
+    }
+
+    /**
+     * Takes an array of options and converts them to an XML string recursively
+     * @param array $options
+     * @return string $xml
+     */
+    public function renderXmlOptions(array $options) {
+        $xml = '';
+        foreach ($options AS $key => $value) {
+            switch (true) {
+                case is_array($value):
+                    $value = $this->renderXmlOptions($value);
+                    break;
+                case is_bool($value):
+                    $value = ($value) ? 'true' : 'false';
+                    break;
+                default:
+                    $value = htmlentities((string) $value);
+            }
+
+            $key = preg_replace('/[^a-z0-9_\-]+/i', '_', $key);
+            $xml .= sprintf('<%s>%s</%s>', $key, $value, $key);
+        }
+
+        return $xml;
     }
 
 }
