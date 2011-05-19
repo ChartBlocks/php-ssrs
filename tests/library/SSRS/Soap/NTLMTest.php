@@ -25,10 +25,10 @@ class SSRS_Soap_NTLMTest extends PHPUnit_Framework_TestCase {
             )
         );
 
-        $SOAP = $this->getMock('SSRS_Soap_NTLM', array('_callCurl'), $arguments);
+        $SOAP = $this->getMock('SSRS_Soap_NTLM', array('callCurl'), $arguments);
 
         $SOAP->expects($this->once())
-                ->method('_callCurl')
+                ->method('callCurl')
                 ->with($this->equalTo('http://localhost/soap/ms.wsdl.xml'));
 
         $SOAP->fetchWSDL();
@@ -104,4 +104,3 @@ class SSRS_Soap_NTLMTest extends PHPUnit_Framework_TestCase {
     }
 
 }
-?>
