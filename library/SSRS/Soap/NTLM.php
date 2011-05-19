@@ -93,7 +93,7 @@ class SSRS_Soap_NTLM extends SoapClient {
     public function cacheWSDL($fileContents) {
         $result = file_put_contents($this->_cachePath, $fileContents);
         if ($result) {
-            $this->setCacheWSDLPermission(0666  );
+            $this->setCacheWSDLPermission(0666);
         }
     }
 
@@ -107,18 +107,18 @@ class SSRS_Soap_NTLM extends SoapClient {
 
     public function fetchWSDL() {
         if ($this->isCacheValid() === false) {
-            $wsdlContent = $this->_callCurl($this->_uri);
+            $wsdlContent = $this->callCurl($this->_uri);
             $this->cacheWSDL($wsdlContent);
         }
     }
 
     public function __doRequest($data, $url, $action) {
         $this->_lastRequest = (string) $data;
-        $this->_lastResponse = $this->_callCurl($url, $data, $action);
+        $this->_lastResponse = $this->callCurl($url, $data, $action);
         return $this->_lastResponse;
     }
 
-    protected function _callCurl($url, $data = null, $action = null) {
+    public function callCurl($url, $data = null, $action = null) {
         $handle = curl_init();
         curl_setopt($handle, CURLOPT_URL, $url);
         curl_setopt($handle, CURLOPT_FAILONERROR, false);
@@ -130,26 +130,30 @@ class SSRS_Soap_NTLM extends SoapClient {
         curl_setopt($handle, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
 
         $headers = array(
-            'Method: POST',
+            'Method: ' . ($data === null) ? 'GET' : 'POST',
             'Connection: Keep-Alive',
             'User-Agent: PHP-SOAP-CURL',
-            'Content-Type: text/xml; charset=utf-8',
-            'Content-Length: ' . strlen($data),
-            'SOAPAction: "' . $action . '"',
         );
-        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 
         if ($data !== null) {
+            $headers[] = 'Content-Type: text/xml; charset=utf-8';
+            $headers[] = 'Content-Length: ' . strlen($data);
             curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
         }
 
+        if($action !== null){
+            $headers[] = 'SOAPAction: "' . $action . '"';
+        }
+
+        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+
         $response = curl_exec($handle);
-        if($response === false) {
+        if ($response === false) {
             throw new SSRS_Soap_Exception('CURL error: ' . curl_error($handle), curl_errno($handle));
         }
 
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if ($httpCode !== 200){
+        if ($httpCode !== 200) {
             throw new SSRS_Soap_Exception('HTTP error: ' . $httpCode . ' ' . $response, $httpCode);
         }
         curl_close($handle);

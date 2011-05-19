@@ -47,7 +47,7 @@ class SSRS_Report {
      * @param array $options
      */
     public function __construct($baseUri, $options = array()) {
-        $this->_baseUri = rtrim($baseUri, '/');
+        $this->setBaseUri($baseUri);
 
         if (array_key_exists('username', $options)) {
             $this->setUsername($options['username']);
@@ -56,6 +56,14 @@ class SSRS_Report {
         if (array_key_exists('password', $options)) {
             $this->setPassword($options['password']);
         }
+    }
+
+    public function setBaseUri($uri) {
+        $this->_baseUri = rtrim($uri, '/');
+    }
+
+    public function getBaseUri() {
+        return $this->_baseUri;
     }
 
     /**
