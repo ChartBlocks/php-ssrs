@@ -9,7 +9,6 @@
  * @license 
  * @version 0.1
  */
-
 require_once('Soap/NTLM.php');
 require_once('Soap/Exception.php');
 require_once('Object/Abstract.php');
@@ -282,7 +281,7 @@ class SSRS_Report {
 
         $renderParams = array(
             'Format' => $format,
-            'DeviceInfo' => $this->renderXmlOptions($deviceInfo),
+            'DeviceInfo' => $this->renderDeviceInfo($deviceInfo),
             'PaginationMode' => $PaginationMode
         );
 
@@ -309,22 +308,34 @@ class SSRS_Report {
     }
 
     /**
+     * Translate deviceInfo array into XML
+     * Look out for translation entities
+     * @param array $deviceInfo
+     */
+    public function renderDeviceInfo(array $deviceInfo) {
+        $translations = array('_SID_' => $this->_sessionId);
+        return $this->renderXmlOptions($deviceInfo, $translations);
+    }
+
+    /**
      * Takes an array of options and converts them to an XML string recursively
      * @param array $options
+     * @param array $translations
      * @return string $xml
      */
-    public function renderXmlOptions(array $options) {
+    public function renderXmlOptions(array $options, $translations = array()) {
         $xml = '';
         foreach ($options AS $key => $value) {
             switch (true) {
                 case is_array($value):
-                    $value = $this->renderXmlOptions($value);
+                    $value = $this->renderXmlOptions($value, $translations);
                     break;
                 case is_bool($value):
                     $value = ($value) ? 'true' : 'false';
                     break;
                 default:
-                    $value = htmlentities((string) $value);
+                    $value = strtr($value, $translations);
+                    $value = htmlentities($value);
             }
 
             $key = preg_replace('/[^a-z0-9_\-]+/i', '_', $key);
