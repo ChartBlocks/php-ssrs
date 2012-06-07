@@ -128,27 +128,6 @@ class SSRS_ReportTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($expected, $result);
     }
 
-    public function testSetExecutionParametersReturnsCorrectObject() {
-        require(dirname(__FILE__) . '/ReportTest/SetExecutionParametersObject.php');
-        $executionID = 'ybv45155dta00245nxlqfi55';
-
-        $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportExecution2005.wsdl', 'SoapClientMockExecutionParams');
-        $soapMock->expects($this->any())
-                ->method('SetExecutionParameters')
-                ->with($this->equalTo(array('Parameters' => $parameters->getParameterArrayForSoapCall(), 'ParameterLanguage' => 'en-us')))
-                ->will($this->returnValue($returnExecParams));
-
-        $ssrs = new SSRS_Report('http://test/ReportServer');
-        $ssrs->setSoapExecution($soapMock)
-                ->setSessionId($executionID);
-
-        $expected = new SSRS_Object_ExecutionInfo($returnExecParams);
-        $result = $ssrs->setExecutionParameters($parameters);
-
-        $this->assertInstanceOf('SSRS_Object_ExecutionInfo', $result);
-        $this->assertEquals($expected, $result);
-    }
-
     public function testRenderOutputsReport() {
         $executionID = 'ybv45155dta00245nxlqfi55';
 

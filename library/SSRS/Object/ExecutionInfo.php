@@ -11,9 +11,19 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
         $this->setData($info);
     }
 
-    public function setParameters(stdClass $params){
-        $this->data['Parameters'] = new SSRS_Object_ReportParameters();
-        $this->data['Parameters']->setParameters($params->ReportParameter);
+    public function setParameters(stdClass $params) {
+        $parameters = array();
+        foreach ($params->ReportParameter AS $reportParam) {
+            $parameter = new SSRS_Object_ReportParameter($reportParam->Name, null);
+            $parameter->setData($reportParam);
+
+            $parameters[] = $parameter;
+        }
+
+        $execParams = new SSRS_Object_ExecutionParameters();
+        $execParams->setParameters($parameters);
+
+        $this->data['Parameters'] = $execParams;
     }
 
 }

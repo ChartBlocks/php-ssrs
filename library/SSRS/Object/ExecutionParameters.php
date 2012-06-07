@@ -9,34 +9,37 @@ class SSRS_Object_ExecutionParameters extends SSRS_Object_ArrayIterator {
 
     public $iteratorKey = 'Parameters';
 
-    public function __construct($data = null) {
-        parent::__construct($data);
-
-        if ($data instanceof SSRS_Object_ReportParameters) {
-            $this->setParameters($data);
-        }
+    public function __construct(array $parameters = array()) {
+        parent::__construct(null);
+        $this->setParameters($parameters);
     }
 
     public function init() {
         $this->data['Parameters'] = array();
     }
 
-    public function setParameters(SSRS_Object_ReportParameters $parameters) {
-        foreach ($parameters AS $parameter) {
-            if (($parameters instanceof SSRS_Object_ExecutionParameter) === false) {
-                $parameter = new SSRS_Object_ExecutionParameter($parameter);
+    public function setParameters(array $parameters) {
+        $this->data['Parameters'] = array();
+
+        foreach ($parameters AS $key => $parameter) {
+            if (($parameter instanceof SSRS_Object_ReportParameter) === false) {
+                $parameter = new SSRS_Object_ReportParameter($key, $parameter);
             }
 
             $this->data['Parameters'][] = $parameter;
         }
     }
 
+    public function getParameters() {
+        return $this->data['Parameters'];
+    }
+
     public function getParameterArrayForSoapCall() {
         $execParams = array();
-        foreach ($this AS $parameter) {
+        foreach ($this->getParameters() AS $parameter) {
             $execParams[] = array(
-                'Name' => $parameter->Name,
-                'Value' => $parameter->Value,
+                'Name' => $parameter->name,
+                'Value' => $parameter->value,
             );
         }
 
