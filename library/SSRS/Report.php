@@ -21,7 +21,6 @@ require_once('Object/ExecutionInfo.php');
 require_once('Object/Extensions.php');
 require_once('Object/Extension.php');
 require_once('Object/ReportParameter.php');
-require_once('Object/Report.php');
 require_once('Object/ReportOutput.php');
 require_once('Report/Exception.php');
 
@@ -205,6 +204,21 @@ class SSRS_Report {
     }
 
     /**
+     * Returns item properties
+     * 
+     * @param string $path
+     * @return \SSRS_Object_Properties
+     */
+    public function getProperties($itemPath) {
+        $params = array(
+            'ItemPath' => $itemPath,
+        );
+
+        $result = $this->getSoapService()->GetProperties($params);
+        return new SSRS_Object_Properties($result->Values->Property);
+    }
+
+    /**
      * Returns item definition details in a XML string.
      * Used to backup report definitions into a XML based RDL file.
      *
@@ -233,7 +247,7 @@ class SSRS_Report {
      *
      * @param string $Report
      * @param string $HistoryId
-     * @return SSRS_Object_Report
+     * @return SSRS_Object_ExecutionInfo
      */
     public function loadReport($Report, $HistoryId = null) {
         $params = array(
@@ -242,7 +256,17 @@ class SSRS_Report {
         );
 
         $result = $this->getSoapExecution()->LoadReport($params);
-        return new SSRS_Object_Report($result);
+        return new SSRS_Object_ExecutionInfo($result);
+    }
+    
+    /**
+     * Get current execution info
+     * 
+     * @return \SSRS_Object_ExecutionInfo
+     */
+    public function getExecutionInfo(){
+        $result = $this->getSoapExecution()->GetExecutionInfo2();
+        return new SSRS_Object_ExecutionInfo($result);
     }
 
     /**
@@ -273,7 +297,7 @@ class SSRS_Report {
      * @param string $PaginationMode
      * @return SSRS_Object_ReportOutput
      */
-    public function render($format, $deviceInfo = array(), $PaginationMode='Estimate') {
+    public function render($format, $deviceInfo = array(), $PaginationMode = 'Estimate') {
         $this->checkSessionId();
         $deviceInfo = array('DeviceInfo' => array_merge(array('Toolbar' => 'false'), $deviceInfo));
 
