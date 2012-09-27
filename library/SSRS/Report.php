@@ -258,13 +258,13 @@ class SSRS_Report {
         $result = $this->getSoapExecution()->LoadReport($params);
         return new SSRS_Object_ExecutionInfo($result);
     }
-    
+
     /**
      * Get current execution info
      * 
      * @return \SSRS_Object_ExecutionInfo
      */
-    public function getExecutionInfo(){
+    public function getExecutionInfo() {
         $result = $this->getSoapExecution()->GetExecutionInfo2();
         return new SSRS_Object_ExecutionInfo($result);
     }
@@ -309,6 +309,27 @@ class SSRS_Report {
 
         $result = $this->getSoapExecution()->Render2($renderParams);
         return new SSRS_Object_ReportOutput($result);
+    }
+
+    /**
+     * 
+     * @param string $format
+     * @param string $streamId
+     * @param array $deviceInfo
+     * @return \SSRS_Object_RenderStream
+     */
+    public function renderStream($format, $streamId, $deviceInfo = array()) {
+        $this->checkSessionId();
+        $deviceInfo = array('DeviceInfo' => array_merge(array('Toolbar' => 'false'), $deviceInfo));
+
+        $renderParams = array(
+            'Format' => $format,
+            'StreamID' => $streamId,
+            'DeviceInfo' => $this->renderDeviceInfo($deviceInfo),
+        );
+
+        $result = $this->getSoapExecution()->RenderStream($renderParams);
+        return new SSRS_Object_RenderStream($result);
     }
 
     /**
