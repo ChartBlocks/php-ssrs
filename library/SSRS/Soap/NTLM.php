@@ -47,7 +47,7 @@ class SSRS_Soap_NTLM extends SoapClient {
         return $this->_uri;
     }
 
-    public function setCacheExpiry($cacheExpiry=86400) {
+    public function setCacheExpiry($cacheExpiry = 86400) {
         $this->_cacheExpiry = $cacheExpiry;
         return $this;
     }
@@ -141,7 +141,7 @@ class SSRS_Soap_NTLM extends SoapClient {
             curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
         }
 
-        if($action !== null){
+        if ($action !== null) {
             $headers[] = 'SOAPAction: "' . $action . '"';
         }
 
@@ -153,7 +153,9 @@ class SSRS_Soap_NTLM extends SoapClient {
         }
 
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if ($httpCode !== 200) {
+        if ($httpCode >= 300 && $httpCode <= 600) {
+            throw SSRS_Soap_ServerException::fromResponse($response);
+        } else if ($httpCode !== 200) {
             throw new SSRS_Soap_Exception('HTTP error: ' . $httpCode . ' ' . $response, $httpCode, $response);
         }
         curl_close($handle);
