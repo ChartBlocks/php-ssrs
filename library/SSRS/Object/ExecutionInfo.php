@@ -13,7 +13,7 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
      * @var SSRS_Object_ExecutionInfo
      */
     public $executionInfo;
-    
+
     public function __construct(stdClass $info) {
         $this->setData($info->executionInfo);
         $this->executionInfo = $this;
@@ -25,11 +25,13 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
 
     public function setReportParameters(stdClass $params) {
         $parameters = array();
-        foreach ($params->ReportParameter AS $reportParam) {
-            $parameter = new SSRS_Object_ReportParameter($reportParam->Name, isset($reportParam->Value) ? $reportParam->Value : null);
-            $parameter->setData($reportParam);
+        if (isset($params->ReportParameter)) {
+            foreach ($params->ReportParameter AS $reportParam) {
+                $parameter = new SSRS_Object_ReportParameter($reportParam->Name, isset($reportParam->Value) ? $reportParam->Value : null);
+                $parameter->setData($reportParam);
 
-            $parameters[] = $parameter;
+                $parameters[] = $parameter;
+            }
         }
 
         $this->data['ReportParameters'] = $parameters;
