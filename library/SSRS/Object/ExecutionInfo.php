@@ -26,7 +26,8 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
     public function setReportParameters(stdClass $params) {
         $parameters = array();
         if (isset($params->ReportParameter)) {
-            foreach ($params->ReportParameter AS $reportParam) {
+            $reportParameters = is_array($params->ReportParameter) ? $params->ReportParameter : array($params->ReportParameter);
+            foreach ($reportParameters AS $reportParam) {
                 $parameter = new SSRS_Object_ReportParameter($reportParam->Name, isset($reportParam->Value) ? $reportParam->Value : null);
                 $parameter->setData($reportParam);
 
