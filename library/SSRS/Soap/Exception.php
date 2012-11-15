@@ -5,7 +5,7 @@ class SSRS_Soap_Exception extends Exception{
     public $httpCode;
     public $response;
     
-    public function __construct($message, $code, $response) {
+    public function __construct($message, $code, $response = null) {
         $this->httpCode = $code;
         $this->response = $response;
         
