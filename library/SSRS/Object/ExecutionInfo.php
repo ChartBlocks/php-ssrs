@@ -49,4 +49,15 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
         return $this->data['ReportParameters'];
     }
 
+    public function getReportParameter($name) {
+        $parameters = $this->getReportParameters();
+        foreach ($parameters AS $parameter) {
+            if ($parameter->name === $name) {
+                return $parameter;
+            }
+        }
+
+        return null;
+    }
+
 }
