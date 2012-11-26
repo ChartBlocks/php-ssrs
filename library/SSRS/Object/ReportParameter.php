@@ -15,9 +15,19 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
     public $name;
     public $value;
 
+    public function getDefaultValue() {
+        $default = null;
+
+        if (key_exists('DefaultValues', $this->data)) {
+            $default = $this->data['DefaultValues']->Value;
+        }
+
+        return in_array($default, $this->getValidValues()) ? $default : null;
+    }
+
     public function getValidValues() {
-        $data = false;
-        
+        $data = array();
+
         if (key_exists('ValidValues', $this->data)) {
             $data = array();
 
@@ -35,6 +45,27 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
         }
 
         return $data;
+    }
+
+    public function hasDependencies() {
+        return (isset($this->data['Dependencies']->Dependency)
+                && !empty($this->data['Dependencies']->Dependency));
+    }
+
+    public function getDependencies() {
+        return (array) $this->data['Dependencies']->Dependency;
+    }
+
+    public function hasOutstandingDependencies() {
+        return ($this->getState() == 'HasOutstandingDependencies');
+    }
+
+    public function getState() {
+        return key_exists('State', $this->data) ? $this->data['State'] : null;
+    }
+
+    public function isMultiValue() {
+        return !empty($this->data['MultiValue']);
     }
 
 }
