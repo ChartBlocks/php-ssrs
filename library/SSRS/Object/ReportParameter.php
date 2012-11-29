@@ -21,8 +21,13 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
         if (key_exists('DefaultValues', $this->data)) {
             $default = $this->data['DefaultValues']->Value;
         }
-
-        return in_array($default, $this->getValidValues()) ? $default : null;
+        $validValues = array();
+        foreach ($this->getValidValues() as $value) {
+            if ($default == $value->Value) {
+                return $default;
+            }
+        }
+        return null;
     }
 
     public function getValidValues() {
@@ -32,18 +37,22 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
             $data = array();
 
             if (is_object($this->data['ValidValues']->ValidValue)) {
-                $data[$this->data['ValidValues']->ValidValue->Label] = $this->data['ValidValues']->ValidValue->Value;
+                $data[] = new SSRS_Object_ReportParameter_ValidValue($this->data['ValidValues']->ValidValue->Label,
+                                $this->data['ValidValues']->ValidValue->Value);
             } else {
                 foreach ($this->data['ValidValues']->ValidValue AS $value) {
-                    $data[$value->Label] = $value->Value;
+                    if (is_object($value)) {
+                        $data[] = new SSRS_Object_ReportParameter_ValidValue($value->Label, $value->Value);
+                    } else {
+                        $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value, (string) $value);
+                    }
                 }
             }
 
-            if (!empty($this->data['AllowBlank'])) {
-                $data['AllowBlank'] = '';
-            }
+//            if (!empty($this->data['AllowBlank'])) {
+//                $data[] = new SSRS_Object_ReportParameter_ValidValue('', '');
+//            }
         }
-
         return $data;
     }
 
