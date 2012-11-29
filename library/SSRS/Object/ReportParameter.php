@@ -16,18 +16,19 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
     public $value;
 
     public function getDefaultValue() {
-        $default = null;
+        $defaults = array();
 
         if (key_exists('DefaultValues', $this->data)) {
-            $default = $this->data['DefaultValues']->Value;
+            $defaults = (array) $this->data['DefaultValues']->Value;
         }
+
         $validValues = array();
-        foreach ($this->getValidValues() as $value) {
-            if ($default == $value->Value) {
-                return $default;
-            }
+        foreach ($this->getValidValues() AS $validValue) {
+            $validValues[] = $validValue->Value;
         }
-        return null;
+
+        $validDefaults = array_intersect($defaults, $validValues);
+        return $validDefaults;
     }
 
     public function getValidValues() {
