@@ -356,7 +356,10 @@ class SSRS_Report {
      * @param array $deviceInfo
      */
     public function renderDeviceInfo(array $deviceInfo) {
-        $translations = array('_SID_' => $this->_sessionId);
+        $translations = array(
+            '_SID_' => $this->_sessionId,
+            '_TIME_' => time(),
+        );
         return $this->renderXmlOptions($deviceInfo, $translations);
     }
 
