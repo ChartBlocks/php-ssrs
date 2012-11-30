@@ -22,13 +22,16 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
             $defaults = (array) $this->data['DefaultValues']->Value;
         }
 
-        $validValues = array();
-        foreach ($this->getValidValues() AS $validValue) {
-            $validValues[] = $validValue->Value;
+        if ($this->isSelect()) {
+            $validValues = array();
+            foreach ($this->getValidValues() AS $validValue) {
+                $validValues[] = $validValue->Value;
+            }
+
+            $defaults = array_intersect($defaults, $validValues);
         }
 
-        $validDefaults = array_intersect($defaults, $validValues);
-        return $validDefaults;
+        return $defaults;
     }
 
     public function getValidValues() {
@@ -76,6 +79,10 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
 
     public function isMultiValue() {
         return !empty($this->data['MultiValue']);
+    }
+
+    public function isSelect() {
+        return isset($this->data['ValidValues']);
     }
 
 }
