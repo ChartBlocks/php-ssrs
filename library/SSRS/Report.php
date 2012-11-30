@@ -354,6 +354,27 @@ class SSRS_Report {
     }
 
     /**
+     * 
+     * @param string $format
+     * @param string $streamId
+     * @param array $deviceInfo
+     * @return \SSRS_Object_RenderStream
+     */
+    public function getRenderResource($format, $deviceInfo = array()) {
+        $this->checkSessionId();
+
+        $deviceInfo = array('DeviceInfo' => $deviceInfo);
+
+        $renderParams = array(
+            'Format' => (string) $format,
+            'DeviceInfo' => $this->renderDeviceInfo($deviceInfo),
+        );
+        
+        $result = $this->getSoapExecution()->GetRenderResource($renderParams);
+        return new SSRS_Object_RenderStream($result);
+    }
+
+    /**
      * Checks if there is a valid Session ID set.
      *
      */

@@ -15,6 +15,10 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
     public $name;
     public $value;
 
+    /**
+     *
+     * @return array
+     */
     public function getDefaultValue() {
         $defaults = array();
 
@@ -34,6 +38,10 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
         return $defaults;
     }
 
+    /**
+     *
+     * @return \SSRS_Object_ReportParameter_ValidValue[]
+     */
     public function getValidValues() {
         $data = array();
 
@@ -60,27 +68,51 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
         return $data;
     }
 
+    /**
+     *
+     * @return bool 
+     */
     public function hasDependencies() {
         return (isset($this->data['Dependencies']->Dependency)
                 && !empty($this->data['Dependencies']->Dependency));
     }
 
+    /**
+     *
+     * @return bool 
+     */
     public function getDependencies() {
         return (array) $this->data['Dependencies']->Dependency;
     }
 
+    /**
+     *
+     * @return bool 
+     */
     public function hasOutstandingDependencies() {
         return ($this->getState() == 'HasOutstandingDependencies');
     }
 
+    /**
+     *
+     * @return bool 
+     */
     public function getState() {
         return key_exists('State', $this->data) ? $this->data['State'] : null;
     }
 
+    /**
+     *
+     * @return bool 
+     */
     public function isMultiValue() {
         return !empty($this->data['MultiValue']);
     }
 
+    /**
+     *
+     * @return bool 
+     */
     public function isSelect() {
         return isset($this->data['ValidValues']);
     }
