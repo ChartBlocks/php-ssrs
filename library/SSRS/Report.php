@@ -243,6 +243,27 @@ class SSRS_Report {
     }
 
     /**
+     * 
+     * @param type $toggleId
+     * @return type
+     */
+    public function toggleItem($toggleId) {
+        $params = array(
+            'ToggleID' => $toggleId
+        );
+        return $this->getSoapExecution()->ToggleItem($params);
+    }
+
+    public function sort($sortId, $direction, $clear) {
+        $params = array(
+            'SortItem' => $sortId,
+            'Direction' => $direction,
+            'Clear' => $clear,
+        );
+        return $this->getSoapExecution()->Sort($params);
+    }
+
+    /**
      * Loads all details relating to a report including all available search parameters
      *
      * @param string $Report

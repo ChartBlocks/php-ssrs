@@ -13,4 +13,8 @@ class SSRS_Object_ReportParameter_ValidValue {
         $this->Label = $label;
     }
 
+    public function __toString() {
+        return $this->Value;
+    }
+
 }
