@@ -38,6 +38,10 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
         $this->data['ReportParameters'] = $parameters;
         return $this;
     }
+    
+    public function getReportPath(){
+        return $this->data['ReportPath'];
+    }
 
     /**
      * Returns all report parameters in an array

@@ -299,7 +299,7 @@ class SSRS_Report {
      */
     public function render($format, $deviceInfo = array(), $PaginationMode = 'Estimate') {
         $this->checkSessionId();
-        $deviceInfo = array('DeviceInfo' => array_merge(array('Toolbar' => 'false'), $deviceInfo));
+        $deviceInfo = array('DeviceInfo' => $deviceInfo);
 
         $renderParams = array(
             'Format' => $format,
