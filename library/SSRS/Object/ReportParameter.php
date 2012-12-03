@@ -22,7 +22,7 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
     public function getDefaultValue() {
         $defaults = array();
 
-        if (key_exists('DefaultValues', $this->data)) {
+        if (key_exists('DefaultValues', $this->data) && isset($this->data['DefaultValues']->Value)) {
             $defaults = (array) $this->data['DefaultValues']->Value;
         }
 
@@ -48,9 +48,7 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
     public function getValidValues() {
         $data = array();
 
-        if (key_exists('ValidValues', $this->data)) {
-            $data = array();
-
+        if (key_exists('ValidValues', $this->data) && isset($this->data['ValidValues']->ValidValue)) {
             if (is_object($this->data['ValidValues']->ValidValue)) {
                 $data[] = new SSRS_Object_ReportParameter_ValidValue($this->data['ValidValues']->ValidValue->Label,
                                 $this->data['ValidValues']->ValidValue->Value);
@@ -68,6 +66,7 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
 //                $data[] = new SSRS_Object_ReportParameter_ValidValue('', '');
 //            }
         }
+
         return $data;
     }
 
