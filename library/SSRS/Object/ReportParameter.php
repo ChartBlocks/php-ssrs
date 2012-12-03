@@ -34,9 +34,6 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
 
             $defaults = array_intersect($defaults, $validValues);
         }
-        if ($this->isSelect() && !$this->isMultiValue() && count($defaults) == 1) {
-            return implode('', $defaults);
-        }
 
         return $defaults;
     }
