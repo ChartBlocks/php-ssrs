@@ -38,33 +38,34 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
         return $defaults;
     }
 
+    public function setValidValues($validValues) {
+        if ($validValues instanceof stdClass && isset($validValues->ValidValue) && is_object($validValues->ValidValue)) {
+            $validValues = array($validValues->ValidValue);
+        } elseif ($validValues instanceof stdClass && isset($validValues->ValidValue)) {
+            $validValues = $validValues->ValidValue;
+        }
+
+        $data = array();
+        foreach ($validValues AS $value) {
+            if (is_object($value)) {
+                $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value->Label, (string) $value->Value);
+            } elseif (is_array($value)) {
+                $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value['Label'], (string) $value['Value']);
+            } else {
+                $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value, (string) $value);
+            }
+        }
+
+        $this->data['ValidValues'] = $data;
+        return $this;
+    }
+
     /**
      *
      * @return \SSRS_Object_ReportParameter_ValidValue[]
      */
     public function getValidValues() {
-        $data = array();
-
-        if (key_exists('ValidValues', $this->data) && isset($this->data['ValidValues']->ValidValue)) {
-            if (is_object($this->data['ValidValues']->ValidValue)) {
-                $data[] = new SSRS_Object_ReportParameter_ValidValue($this->data['ValidValues']->ValidValue->Label,
-                                $this->data['ValidValues']->ValidValue->Value);
-            } else {
-                foreach ($this->data['ValidValues']->ValidValue AS $value) {
-                    if (is_object($value)) {
-                        $data[] = new SSRS_Object_ReportParameter_ValidValue($value->Label, $value->Value);
-                    } else {
-                        $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value, (string) $value);
-                    }
-                }
-            }
-
-//            if (!empty($this->data['AllowBlank'])) {
-//                $data[] = new SSRS_Object_ReportParameter_ValidValue('', '');
-//            }
-        }
-
-        return $data;
+        return empty($this->data['ValidValues']) ? array() : $this->data['ValidValues'];
     }
 
     /**
@@ -113,7 +114,7 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
      * @return bool 
      */
     public function isSelect() {
-        return isset($this->data['ValidValues']);
+        return !empty($this->data['ValidValues']);
     }
 
 }
