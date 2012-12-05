@@ -11,11 +11,12 @@ class SSRS_Object_ReportOutput extends SSRS_Object_Abstract {
         header("Cache-Control: public");
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header("Content-Type: " . $this->mimeType);
+        header("Content-Type: " . $this->MimeType);
         header("Content-Transfer-Encoding: binary");
         header("Content-Length: " . strlen($this->Result));
 
-        die($this->Result);
+        echo($this->Result);
+        exit(0);
     }
 
     public function __toString() {
