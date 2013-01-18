@@ -114,7 +114,7 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
      * @return bool 
      */
     public function isSelect() {
-        return !empty($this->data['ValidValues']);
+        return ($this->isMultiValue() || (!empty($this->data['ValidValues']) && is_array($this->data['ValidValues']) && count($this->data['ValidValues']) > 0));
     }
 
 }
