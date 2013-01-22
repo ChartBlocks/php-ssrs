@@ -8,7 +8,9 @@
 class SSRS_Object_ReportOutput extends SSRS_Object_Abstract {
 
     public function download($filename) {
-        header("Cache-Control: public");
+        header("Cache-control: no-cache");
+        header("Pragma: no-cache");
+        header("Expires: -1");
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header("Content-Type: " . $this->MimeType);
