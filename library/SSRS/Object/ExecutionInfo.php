@@ -57,7 +57,7 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
 
             $parameters[] = $parameter;
         }
-        
+
         $this->data['ReportParameters'] = $parameters;
         return $this;
     }
@@ -94,6 +94,10 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
 
     public function __wakeup() {
         //$this->executionInfo = $this;
+    }
+
+    public function getPageCount() {
+        return isset($this->data['NumPages']) ? $this->data['NumPages'] : 1;
     }
 
 }
