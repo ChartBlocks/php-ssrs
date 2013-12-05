@@ -10,12 +10,18 @@ The easiest way to use php-ssrs is to install it with composer. If you don't wan
 
 To include the library in to your project using composer, add the following to your composer.json file:
 
-``` json
+```json
 {
     "require": {
-        "rb-cohen/cif-parser": "dev-master"
+        "chartblocks/php-ssrs": "~1.0."
     }
 }
 ```
 
 See the wiki for information on how to get started!
+
+```php
+<?php
+$ssrs = new SSRS_Report('http://server/reportserver/', array('username' => 'thomas', 'password' => 'secureme'));
+$ssrs->listChildren('/Report Folder');
+```
