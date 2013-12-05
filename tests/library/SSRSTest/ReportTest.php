@@ -2,7 +2,13 @@
 
 namespace SSRSTest;
 
-class ReportTest extends PHPUnit_Framework_TestCase {
+use SSRS\Report;
+use SSRS\Object\CatalogItems;
+use SSRS\Object\ReportOutput;
+use SoapVar;
+use SoapHeader;
+
+class ReportTest extends \PHPUnit_Framework_TestCase {
 
     public function testPassCredentialsOnConstruct() {
         $options = array(
@@ -10,25 +16,25 @@ class ReportTest extends PHPUnit_Framework_TestCase {
             'password' => 'monkhouse'
         );
 
-        $ssrs = new \SSRS\Report('http://test', $options);
+        $ssrs = new Report('http://test', $options);
 
         $this->assertEquals($options['username'], $ssrs->getUsername());
         $this->assertEquals($options['password'], $ssrs->getPassword());
     }
 
     public function testGetSoapServiceReturnsNTLMByDefault() {
-        $ssrs = new \SSRS\Report('http://test');
+        $ssrs = new Report('http://test');
         $soap = $ssrs->getSoapService(false);
 
-        $this->assertInstanceOf('\SSRS\Soap_NTLM', $soap);
+        $this->assertInstanceOf('\SSRS\Soap\NTLM', $soap);
         $this->assertEquals('http://test/ReportService2010.asmx', $soap->getUri());
     }
 
     public function testGetSoapExecutionReturnsNTLMByDefault() {
-        $ssrs = new \SSRS\Report('http://test');
+        $ssrs = new Report('http://test');
         $soap = $ssrs->getSoapExecution(false);
 
-        $this->assertInstanceOf('\SSRS\Soap\NTLM', $soap);
+        $this->assertInstanceOf('SSRS\Soap\NTLM', $soap);
         $this->assertEquals('http://test/ReportExecution2005.asmx', $soap->getUri());
     }
 
@@ -44,7 +50,7 @@ class ReportTest extends PHPUnit_Framework_TestCase {
                 ->method('__setSoapHeaders')
                 ->with($this->equalTo(array($soapHeader)));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock);
 
         $result = $ssrs->setSessionId($sessionId);
@@ -53,7 +59,7 @@ class ReportTest extends PHPUnit_Framework_TestCase {
 
     public function testLoadChildrenReturnsItemList() {
         $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportService2010.wsdl', 'SoapClientMockChildren');
-        $catalogItem1 = new stdClass;
+        $catalogItem1 = new \stdClass;
         $catalogItem1->ID = '1386fc6d-9c58-489f-adea-081146b62799';
         $catalogItem1->Name = 'Report Reference';
         $catalogItem1->Path = '/Reports/Report_Reference';
@@ -64,8 +70,8 @@ class ReportTest extends PHPUnit_Framework_TestCase {
         $catalogItem1->CreatedBy = 'MSSQL\WebAccount';
         $catalogItem1->ModifiedBy = 'MSSQL\WebAccount';
 
-        $return = new stdClass;
-        $return->CatalogItems = new stdClass;
+        $return = new \stdClass;
+        $return->CatalogItems = new \stdClass;
         $return->CatalogItems->CatalogItem = array($catalogItem1);
 
         $soapMock->expects($this->any())
@@ -73,11 +79,11 @@ class ReportTest extends PHPUnit_Framework_TestCase {
                 ->with($this->equalTo(array('ItemPath' => '/Reports', 'Recursive' => true)))
                 ->will($this->returnValue($return));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapService($soapMock);
 
         $result = $ssrs->listChildren('/Reports', true);
-        $expected = new \SSRS\Object\CatalogItems($return);
+        $expected = new CatalogItems($return);
 
         $this->assertInstanceOf('\SSRS\Object\CatalogItems', $result);
         $this->assertEquals($expected, $result);
@@ -92,7 +98,7 @@ class ReportTest extends PHPUnit_Framework_TestCase {
                 ->method('ListChildren')
                 ->with($this->equalTo(array('ItemPath' => '/Reports', 'Recursive' => true)));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapService($soapMock);
 
         $result = $ssrs->listChildren('/Reports', $recursiveParam);
@@ -105,7 +111,7 @@ class ReportTest extends PHPUnit_Framework_TestCase {
                 ->method('getItemDefinition')
                 ->with($this->equalTo(array('ItemPath' => '/Reports/Managed Account Performance')));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapService($soapMock);
 
         $result = $ssrs->getItemDefinition('/Reports/Managed Account Performance');
@@ -120,9 +126,9 @@ class ReportTest extends PHPUnit_Framework_TestCase {
                 ->with($this->equalTo(array('Report' => '/Reports/Reference_Report', 'HistoryID' => null)))
                 ->will($this->returnValue($testReport));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock);
-        $expected = new \SSRS\Object\Report($testReport);
+        $expected = new ReportOutput($testReport);
 
         $result = $ssrs->loadReport('/Reports/Reference_Report');
         $this->assertEquals($expected, $result);
@@ -135,11 +141,11 @@ class ReportTest extends PHPUnit_Framework_TestCase {
         $soapMock->expects($this->any())->method('Render2')
                 ->with($this->equalTo(array(
                             'Format' => 'HTML4.0',
-                            'DeviceInfo' => '<DeviceInfo><Toolbar>false</Toolbar></DeviceInfo>',
+                            'DeviceInfo' => '<DeviceInfo></DeviceInfo>',
                             'PaginationMode' => 'Estimate'
                         )));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock)
                 ->setSessionId($executionID);
 
@@ -155,7 +161,7 @@ class ReportTest extends PHPUnit_Framework_TestCase {
                             'PaginationMode' => 'Another'
                         )));
 
-        $ssrs = new \SSRS\Report('http://test/ReportServer');
+        $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock)
                 ->setSessionId('test');
 

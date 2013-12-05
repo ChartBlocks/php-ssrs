@@ -15,7 +15,7 @@ class CatalogItems extends ArrayIterator {
         $this->data['CatalogItems'] = array();
     }
 
-    public function setCatalogItems(stdClass $items) {
+    public function setCatalogItems(\stdClass $items) {
         foreach ($items->CatalogItem AS $item) {
             $this->addCatalogItem(new CatalogItem($item));
         }

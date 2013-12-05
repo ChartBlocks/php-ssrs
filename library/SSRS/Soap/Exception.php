@@ -7,7 +7,7 @@ class Exception extends \Exception {
     public $httpCode;
     public $response;
 
-    public function __construct($message, $code, $response = null) {
+    public function __construct($message, $code = null, $response = null) {
         $this->httpCode = $code;
         $this->response = $response;
 

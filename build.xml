@@ -1,60 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <project name="php-ssrs" basedir="." default="app">
-    <property name="builddir" value="${ws}/build" />
-
-    <target name="clean">
-        <echo msg="Clean..." />
-        <delete dir="${builddir}" />
-    </target>
-
-    <target name="prepare">
-        <echo msg="Prepare..." />
-        <mkdir dir="${builddir}" />
-        <mkdir dir="${builddir}/logs" />
-        <mkdir dir="${builddir}/logs/coverage" />
-        <mkdir dir="${builddir}/docs" />
-    </target>
-
-    <!-- Deploy app -->
-    <target name="app">
-        <echo msg="Prepare app..." />
-    </target>
-
-    <!-- PHP API Documentation -->
-    <target name="phpdoc">
-        <echo msg="PHP Documentor..." />
-        <phpdoc title="API Documentation"
-                destdir="${builddir}/docs"
-                sourcecode="yes"
-                defaultpackagename="php-ssrs"
-                output="HTML:Smarty:PHP">
-            <fileset dir="source">
-                <include name="**/*.php" />
-            </fileset>
-        </phpdoc>
-    </target>
-
-    <!-- PHP copy/paste analysis -->
-    <target name="phpcpd">
-        <echo msg="PHP Copy/Paste..." />
-        <exec command="phpcpd --log-pmd '${builddir}/logs/pmd.xml' source" escape="false" />
-    </target>
-
-    <!-- PHP dependency checker -->
-    <target name="pdepend">
-        <echo msg="PHP Depend..." />
-        <exec command="pdepend --jdepend-xml='${builddir}/logs/jdepend.xml' '${ws}/source'" escape="false" />
-    </target>
-
-    <!-- PHP CodeSniffer -->
-    <target name="phpcs">
-        <echo msg="PHP CodeSniffer..." />
-        <exec command="phpcs --tab-width=4 --extensions=php --standard=Iw --report=checkstyle '${ws}/source' > '${builddir}/logs/checkstyle.xml'" escape="false" />
-    </target>
-
     <!-- Unit Tests & coverage analysis -->
     <target name="phpunit">
         <echo msg="PHP Unit..." />
-        <exec command="phpunit --configuration '${ws}/source/tests/phpunit.xml' --log-junit '${builddir}/logs/phpunit.xml' --coverage-clover '${builddir}/logs/coverage/clover.xml' '${ws}/source/tests'" />
+        <exec command="phpunit --configuration '${ws}/tests/phpunit.xml' --log-junit '${ws}/logs/phpunit.xml' --coverage-clover '${ws}/logs/coverage/clover.xml' '${ws}/tests'" />
     </target>
 </project>

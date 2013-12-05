@@ -1,18 +1,19 @@
 <?php
 
-require_once('SSRS/Object/Abstract.php');
-require_once('SSRS/Object/CatalogItems.php');
-require_once('SSRS/Object/CatalogItem.php');
+namespace SSRSTest\Object;
+
+use SSRS\Object\CatalogItems;
+use SSRS\Object\CatalogItem;
 
 /**
  * Description of CatalogItemsTest
  *
  * @author arron
  */
-class SSRS_Object_CatalogItemsTest extends PHPUnit_Framework_TestCase {
+class CatalogItemsTest extends \PHPUnit_Framework_TestCase {
 
     public function testSetCatalogItems() {
-        $catalogItem1 = new stdClass;
+        $catalogItem1 = new \stdClass;
         $catalogItem1->ID = '1386fc6d-9c58-489f-adea-081146b62799';
         $catalogItem1->Name = 'Reference Report';
         $catalogItem1->Path = '/Reports/Reference Report';
@@ -23,14 +24,14 @@ class SSRS_Object_CatalogItemsTest extends PHPUnit_Framework_TestCase {
         $catalogItem1->CreatedBy = 'MSSQL\WebAccount';
         $catalogItem1->ModifiedBy = 'MSSQL\WebAccount';
 
-        $data = new stdClass;
-        $data->CatalogItems = new stdClass;
+        $data = new \stdClass;
+        $data->CatalogItems = new \stdClass;
         $data->CatalogItems->CatalogItem = array($catalogItem1);
 
-        $expected = new SSRS_Object_CatalogItems();
-        $expected->addCatalogItem(new SSRS_Object_CatalogItem($catalogItem1));
+        $expected = new CatalogItems();
+        $expected->addCatalogItem(new CatalogItem($catalogItem1));
 
-        $object = new SSRS_Object_CatalogItems($data);
+        $object = new CatalogItems($data);
         $this->assertEquals($expected, $object);
     }
 
@@ -38,27 +39,27 @@ class SSRS_Object_CatalogItemsTest extends PHPUnit_Framework_TestCase {
      * @expectedException PHPUnit_Framework_Error
      */
     public function testPassingInvalidObjectToAddCatalogItemThrowsError() {
-        $object = new SSRS_Object_CatalogItems();
-        $object->addCatalogItem(new SSRS_Object_Abstract());
+        $object = new CatalogItems();
+        $object->addCatalogItem(new \stdClass());
     }
 
     public function testCatalogItemsEmptyArrayOnInit() {
-        $object = new SSRS_Object_CatalogItems();
+        $object = new CatalogItems();
         $this->assertEquals(array(), $object->CatalogItems);
     }
 
     public function testAddCatalogItem() {
-        $object = new SSRS_Object_CatalogItems();
-        $object->addCatalogItem(new SSRS_Object_CatalogItem());
+        $object = new CatalogItems();
+        $object->addCatalogItem(new CatalogItem());
 
         $this->assertEquals(1, count($object->CatalogItems));
     }
 
     public function testSetCatalogItemsKeepsCurrentItems() {
-        $dummy = new stdClass;
-        $dummy->CatalogItem[] = new SSRS_Object_CatalogItem();
+        $dummy = new \stdClass;
+        $dummy->CatalogItem[] = new CatalogItem();
 
-        $object = new SSRS_Object_CatalogItems();
+        $object = new CatalogItems();
         $object->setCatalogItems($dummy);
         $this->assertEquals(1, count($object->CatalogItems));
 

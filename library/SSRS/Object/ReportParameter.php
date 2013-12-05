@@ -49,6 +49,7 @@ class ReportParameter extends ObjectAbstract {
             if (is_object($value)) {
                 $data[] = new ValidValue((string) $value->Label, (string) $value->Value);
             } elseif (is_array($value)) {
+                var_dump($value);
                 $data[] = new ValidValue((string) $value['Label'], (string) $value['Value']);
             } else {
                 $data[] = new ValidValue((string) $value, (string) $value);

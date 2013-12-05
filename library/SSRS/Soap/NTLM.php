@@ -77,11 +77,11 @@ class NTLM extends \SoapClient {
         $folder = dirname($path);
 
         if (!is_dir($folder)) {
-            throw new SSRS_Soap_Exception('WSDL cache path is not valid');
+            throw new Exception('WSDL cache path is not valid');
         }
 
         if (!is_writeable($folder)) {
-            throw new SSRS_Soap_Exception('WSDL cache path not writeable');
+            throw new Exception('WSDL cache path not writeable');
         }
 
         $this->_cachePath = $path;

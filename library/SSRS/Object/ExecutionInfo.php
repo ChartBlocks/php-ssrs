@@ -11,7 +11,7 @@ class ExecutionInfo extends ObjectAbstract {
      */
     public $executionInfo;
 
-    public function __construct(stdClass $info = null) {
+    public function __construct(\stdClass $info = null) {
         if ($info) {
             $this->setData($info->executionInfo);
         }
@@ -27,14 +27,14 @@ class ExecutionInfo extends ObjectAbstract {
         return strtotime($this->data['ExpirationDateTime']);
     }
 
-    public function setParameters(stdClass $params) {
+    public function setParameters(\stdClass $params) {
         return $this->setReportParameters($params);
     }
 
     public function setReportParameters($reportParameters) {
         $parameters = array();
 
-        if ($reportParameters instanceof stdClass) {
+        if ($reportParameters instanceof \stdClass) {
             $reportParameters = isset($reportParameters->ReportParameter) ? $reportParameters->ReportParameter : array();
             $reportParameters = is_array($reportParameters) ? $reportParameters : array($reportParameters);
         }

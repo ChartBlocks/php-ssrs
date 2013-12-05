@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <phpunit
+    bootstrap="./bootstrap.php"
     strict="true"
     stopOnError="false"
     stopOnFailure="false"
@@ -9,7 +10,7 @@
     verbose="true"
     >
     <testsuites>
-        <testsuite name="SSRS">
+        <testsuite name="SSRSTest">
             <directory>.</directory>
         </testsuite>
     </testsuites>
