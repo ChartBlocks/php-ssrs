@@ -1,14 +1,13 @@
 <?php
 
+namespace SSRS\Object;
+
 /**
- * SSRS_Object_Abstract
+ * SSRS\Object\Abstract
  *
  * @author arron
  */
-
-require_once('ArrayIterator.php');
-
-class SSRS_Object_CatalogItems extends SSRS_Object_ArrayIterator {
+class CatalogItems extends ArrayIterator {
 
     public $iteratorKey = 'CatalogItems';
 
@@ -18,11 +17,11 @@ class SSRS_Object_CatalogItems extends SSRS_Object_ArrayIterator {
 
     public function setCatalogItems(stdClass $items) {
         foreach ($items->CatalogItem AS $item) {
-            $this->addCatalogItem(new SSRS_Object_CatalogItem($item));
+            $this->addCatalogItem(new CatalogItem($item));
         }
     }
 
-    public function addCatalogItem(SSRS_Object_CatalogItem $item) {
+    public function addCatalogItem(CatalogItem $item) {
         $this->data['CatalogItems'][] = $item;
     }
 

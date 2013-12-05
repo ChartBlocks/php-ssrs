@@ -1,6 +1,8 @@
 <?php
 
-class SSRS_Soap_ServerException extends Exception {
+namespace SSRS\Soap;
+
+class ServerException extends \Exception {
 
     public $faultcode;
     public $faultstring;
@@ -15,12 +17,12 @@ class SSRS_Soap_ServerException extends Exception {
         if (isset($body->Fault)) {
             $fault = $body->Fault->children();
 
-            $exception = new SSRS_Soap_ServerException((string) $fault->faultstring);
+            $exception = new ServerException((string) $fault->faultstring);
             $exception->faultcode = (string) $fault->faultcode;
             $exception->faultstring = (string) $fault->faultstring;
             $exception->faultactor = (string) $fault->faultactor;
         } else {
-            throw new SSRS_Soap_Exception('Invalid server response');
+            throw new Exception('Invalid server response');
         }
 
         return $exception;

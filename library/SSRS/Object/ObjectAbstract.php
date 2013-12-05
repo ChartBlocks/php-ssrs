@@ -1,11 +1,13 @@
 <?php
 
+namespace SSRS\Object;
+
 /**
- * SSRS_Object_Abstract
+ * SSRS\Object\Abstract
  *
  * @author arron
  */
-class SSRS_Object_Abstract {
+abstract class ObjectAbstract {
 
     public $data = array();
 

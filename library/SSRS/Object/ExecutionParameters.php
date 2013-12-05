@@ -1,11 +1,8 @@
 <?php
 
-/**
- * Description of ExecutionParameters
- *
- * @author andrew
- */
-class SSRS_Object_ExecutionParameters extends SSRS_Object_ArrayIterator {
+use SSRS\Object;
+
+class ExecutionParameters extends ArrayIterator {
 
     public $iteratorKey = 'Parameters';
 
@@ -22,10 +19,10 @@ class SSRS_Object_ExecutionParameters extends SSRS_Object_ArrayIterator {
         $this->data['Parameters'] = array();
 
         foreach ($parameters AS $key => $parameter) {
-            if (($parameter instanceof SSRS_Object_ReportParameter) === false) {
+            if (($parameter instanceof ReportParameter) === false) {
                 $values = (array) $parameter;
                 foreach ($values AS $value) {
-                    $this->data['Parameters'][] = new SSRS_Object_ReportParameter($key, $value);
+                    $this->data['Parameters'][] = new ReportParameter($key, $value);
                 }
             } else {
                 $this->data['Parameters'][] = $parameter;

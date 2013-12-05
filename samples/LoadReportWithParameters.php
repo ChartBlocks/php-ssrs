@@ -1,18 +1,18 @@
 <?php
-require('../library/SSRS/Report.php');
-include_once('Zend/Debug.php');
+
+require(__DIR__ . '/../vendor/autoload.php');
+
 $options = array(
-    'username' => 'CaymanUnreg',
-    'password' => 'Gottex2011'
+    'username' => 'testing',
+    'password' => 'password'
 );
 
-$ssrs = new SSRS_Report('http://212.203.112.85/reportserver/', $options);
-$result = $ssrs->loadReport('/Off Shore/Cayman Weekly Risk');
-Zend_Debug::dump($result);
-//die();
+$ssrs = new \SSRS\Report('http://localhost/reportserver/', $options);
+$result = $ssrs->loadReport('/Reports/Reference_Report');
+
 $reportParameters = array(
-    'managedaccount' => '1'
-        );
+    'test' => '1'
+);
 
 $parameters = new SSRS_Object_ExecutionParameters($reportParameters);
 

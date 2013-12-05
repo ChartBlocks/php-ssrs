@@ -1,11 +1,8 @@
 <?php
 
-/**
- * SSRS_Object_Abstract
- *
- * @author arron
- */
-class SSRS_Object_Extensions extends SSRS_Object_ArrayIterator {
+namespace SSRS\Object;
+
+class Extensions extends ArrayIterator {
 
     public $iteratorKey = 'Extension';
 
@@ -15,11 +12,11 @@ class SSRS_Object_Extensions extends SSRS_Object_ArrayIterator {
 
     public function setExtensions(stdClass $items) {
         foreach ($items->Extension AS $item) {
-            $this->addExtension(new SSRS_Object_Extension($item));
+            $this->addExtension(new Extension($item));
         }
     }
 
-    public function addExtension(SSRS_Object_Extension $item) {
+    public function addExtension(Extension $item) {
         $this->data['Extension'][] = $item;
     }
 

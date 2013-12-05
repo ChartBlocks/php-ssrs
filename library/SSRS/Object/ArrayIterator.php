@@ -1,16 +1,13 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+namespace SSRS\Object;
 
 /**
  * Description of Iterator
  *
  * @author andrew
  */
-class SSRS_Object_ArrayIterator extends SSRS_Object_Abstract implements Iterator {
+class ArrayIterator extends ObjectAbstract implements \Iterator {
 
     public $iteratorKey = 'Array';
 

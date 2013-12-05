@@ -1,11 +1,8 @@
 <?php
 
-/**
- * Description of ExecutionParameters
- *
- * @author andrew
- */
-class SSRS_Object_ReportOutput extends SSRS_Object_Abstract {
+namespace SSRS\Object;
+
+class ReportOutput extends ObjectAbstract {
 
     public function download($filename) {
         header("Cache-control: max-age=3600, must-revalidate");

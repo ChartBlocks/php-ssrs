@@ -1,16 +1,13 @@
 <?php
 
-/**
- * SSRS_Object_Abstract
- *
- * @author arron
- */
-class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
+namespace SSRS\Object;
+
+class ExecutionInfo extends ObjectAbstract {
 
     /**
      * Copy of self for backwards compatibility
      * 
-     * @var SSRS_Object_ExecutionInfo
+     * @var SSRS\Object\ExecutionInfo
      */
     public $executionInfo;
 
@@ -52,7 +49,7 @@ class SSRS_Object_ExecutionInfo extends SSRS_Object_Abstract {
                 $data = $reportParam;
             }
 
-            $parameter = new SSRS_Object_ReportParameter($data['name'], $data['value']);
+            $parameter = new ReportParameter($data['name'], $data['value']);
             $parameter->setData($reportParam);
 
             $parameters[] = $parameter;

@@ -1,11 +1,8 @@
 <?php
 
-/**
- * Description of ExecutionParameters
- *
- * @author andrew
- */
-class SSRS_Object_ItemDefinition extends SSRS_Object_Abstract {
+namespace SSRS\Object;
+
+class ItemDefinition extends ObjectAbstract {
 
     public function getXMLString() {
         return $this->Definition;

@@ -1,6 +1,8 @@
 <?php
 
-class SSRS_Object_ReportParameter_ValidValue {
+namespace SSRS\Object\ReportParameter;
+
+class ValidValue {
 
     /**
      * capitals because of SSRS!

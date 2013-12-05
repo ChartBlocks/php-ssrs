@@ -1,3 +1,7 @@
 <?php
 
-class SSRS_Report_Exception extends Exception{}
+namespace SSRS\Report;
+
+class Exception extends \Exception {
+    
+}

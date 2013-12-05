@@ -1,11 +1,8 @@
 <?php
 
-/**
- * SSRS_Object_RenderStream
- *
- * @author arron
- */
-class SSRS_Object_RenderStream extends SSRS_Object_Abstract {
+namespace SSRS\Object;
+
+class RenderStream extends ObjectAbstract {
 
     public $Result;
     public $MimeType;

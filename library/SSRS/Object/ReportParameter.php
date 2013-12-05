@@ -1,11 +1,10 @@
 <?php
 
-/**
- * Description of ExecutionParameters
- *
- * @author andrew
- */
-class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
+namespace SSRS\Object;
+
+use SSRS\Object\ReportParameter\ValidValue;
+
+class ReportParameter extends ObjectAbstract {
 
     public function __construct($name, $value) {
         $this->name = $name;
@@ -48,11 +47,11 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
         $data = array();
         foreach ($validValues AS $value) {
             if (is_object($value)) {
-                $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value->Label, (string) $value->Value);
+                $data[] = new ValidValue((string) $value->Label, (string) $value->Value);
             } elseif (is_array($value)) {
-                $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value['Label'], (string) $value['Value']);
+                $data[] = new ValidValue((string) $value['Label'], (string) $value['Value']);
             } else {
-                $data[] = new SSRS_Object_ReportParameter_ValidValue((string) $value, (string) $value);
+                $data[] = new ValidValue((string) $value, (string) $value);
             }
         }
 
@@ -73,8 +72,7 @@ class SSRS_Object_ReportParameter extends SSRS_Object_Abstract {
      * @return bool 
      */
     public function hasDependencies() {
-        return (isset($this->data['Dependencies']->Dependency)
-                && !empty($this->data['Dependencies']->Dependency));
+        return (isset($this->data['Dependencies']->Dependency) && !empty($this->data['Dependencies']->Dependency));
     }
 
     /**

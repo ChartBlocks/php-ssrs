@@ -1,14 +1,16 @@
 <?php
 
-class SSRS_Object_Properties {
+namespace SSRS\Object;
+
+class Properties {
 
     protected $_properties = array();
 
     public function __construct($properties = array()) {
         $this->addProperties($properties);
     }
-    
-    public function __get($name){
+
+    public function __get($name) {
         return $this->getProperty($name);
     }
 
@@ -18,9 +20,9 @@ class SSRS_Object_Properties {
      */
     public function addProperties(array $properties) {
         foreach ($properties AS $key => $value) {
-            if (is_object($value) && isset($value->Name)) {                
+            if (is_object($value) && isset($value->Name)) {
                 $key = $value->Name;
-                $value = isset($value->Value)? $value->Value : null;
+                $value = isset($value->Value) ? $value->Value : null;
             }
 
             $this->addProperty($key, $value);

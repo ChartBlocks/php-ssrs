@@ -12,6 +12,20 @@
 
 namespace SSRS;
 
+use SoapClient;
+use SoapVar;
+use SoapHeader;
+use SSRS\Soap\NTLM as SoapNTLM;
+use SSRS\Object\CatalogItems;
+use SSRS\Object\Properties;
+use SSRS\Object\ItemDefinition;
+use SSRS\Object\Extensions;
+use SSRS\Object\ExecutionInfo;
+use SSRS\Object\ExecutionParameters;
+use SSRS\Object\ReportOutput;
+use SSRS\Object\RenderStream;
+use SSRS\Report\Exception as ReportException;
+
 class Report {
 
     public $servicePath = 'ReportService2010.asmx';
@@ -81,7 +95,7 @@ class Report {
     public function getSoapExecution($runInit = true) {
         if ($this->_soapExecution === null) {
             $options = array('username' => $this->_username, 'password' => $this->_passwd);
-            $client = new SSRS_Soap_NTLM($this->_baseUri . '/' . $this->executionPath, $options);
+            $client = new SoapNTLM($this->_baseUri . '/' . $this->executionPath, $options);
             if ($runInit) {
                 $client->init();
             }
@@ -101,7 +115,7 @@ class Report {
     public function getSoapService($runInit = true) {
         if ($this->_soapService === null) {
             $options = array('username' => $this->_username, 'password' => $this->_passwd);
-            $client = new SSRS_Soap_NTLM($this->_baseUri . '/' . $this->servicePath, $options);
+            $client = new SoapNTLM($this->_baseUri . '/' . $this->servicePath, $options);
             if ($runInit) {
                 $client->init();
             }
@@ -116,7 +130,7 @@ class Report {
      * Sets username property
      *
      * @param string $username
-     * @return SSRS_Report
+     * @return \SSRS\Report
      */
     public function setUsername($username) {
         $this->_username = (string) $username;
@@ -127,7 +141,7 @@ class Report {
      * Sets password property
      *
      * @param string $password
-     * @return SSRS_Report
+     * @return \SSRS\Report
      */
     public function setPassword($password) {
         $this->_passwd = (string) $password;
@@ -179,7 +193,7 @@ class Report {
      *
      * @param string $itemPath
      * @param boolean $recursive
-     * @return SSRS_Object_CatalogItems
+     * @return \SSRS\Object\CatalogItems
      */
     public function listChildren($itemPath, $recursive = false) {
         $params = array(
@@ -188,14 +202,14 @@ class Report {
         );
 
         $result = $this->getSoapService()->ListChildren($params);
-        return new SSRS_Object_CatalogItems($result);
+        return new CatalogItems($result);
     }
 
     /**
      * Returns item properties
      * 
      * @param string $path
-     * @return \SSRS_Object_Properties
+     * @return \SSRS\Object\Properties
      */
     public function getProperties($itemPath) {
         $params = array(
@@ -203,7 +217,7 @@ class Report {
         );
 
         $result = $this->getSoapService()->GetProperties($params);
-        return new SSRS_Object_Properties($result->Values->Property);
+        return new Properties($result->Values->Property);
     }
 
     /**
@@ -211,23 +225,23 @@ class Report {
      * Used to backup report definitions into a XML based RDL file.
      *
      * @param string $itemPath
-     * @return SSRS_Object_ItemDefinition
+     * @return \SSRS\Object\ItemDefinition
      */
     public function getItemDefinition($itemPath) {
         $params = array(
             'ItemPath' => $itemPath,
         );
         $result = $this->getSoapService()->GetItemDefinition($params);
-        return new SSRS_Object_ItemDefinition($result);
+        return new ItemDefinition($result);
     }
 
     /**
      * Returns a list of all render types to output reports to, such as XML, HTML & PDF.
      *
-     * @return SSRS_Object_Extensions
+     * @return \SSRS\Object\Extensions
      */
     public function listRenderingExtensions() {
-        return new SSRS_Object_Extensions($this->getSoapExecution()->ListRenderingExtensions());
+        return new Extensions($this->getSoapExecution()->ListRenderingExtensions());
     }
 
     /**
@@ -256,7 +270,7 @@ class Report {
      *
      * @param string $Report
      * @param string $HistoryId
-     * @return SSRS_Object_ExecutionInfo
+     * @return \SSRS\Object\ExecutionInfo
      */
     public function loadReport($Report, $HistoryId = null) {
         $params = array(
@@ -265,17 +279,17 @@ class Report {
         );
 
         $result = $this->getSoapExecution()->LoadReport($params);
-        return new SSRS_Object_ExecutionInfo($result);
+        return new ExecutionInfo($result);
     }
 
     /**
      * Get current execution info
      * 
-     * @return \SSRS_Object_ExecutionInfo
+     * @return \SSRS\Object\ExecutionInfo
      */
     public function getExecutionInfo() {
         $result = $this->getSoapExecution()->GetExecutionInfo2();
-        return new SSRS_Object_ExecutionInfo($result);
+        return new ExecutionInfo($result);
     }
 
     /**
@@ -283,11 +297,11 @@ class Report {
      * Pass details from 'LoadReport' method to set the search parameters.
      * Requires the Session/Execution ID to be set.
      *
-     * @param SSRS_Object_ExecutionParameters $request
+     * @param SSRS\Object\ExecutionParameters $request
      * @param string $id
-     * @return SSRS_Object_ExecutionInfo
+     * @return SSRS\Object\ExecutionInfo
      */
-    public function setExecutionParameters(SSRS_Object_ExecutionParameters $parameters, $parameterLanguage = 'en-us') {
+    public function setExecutionParameters(ExecutionParameters $parameters, $parameterLanguage = 'en-us') {
         $this->checkSessionId();
 
         $options = array(
@@ -296,7 +310,7 @@ class Report {
         );
 
         $result = $this->getSoapExecution()->SetExecutionParameters($options);
-        return new SSRS_Object_ExecutionInfo($result);
+        return new ExecutionInfo($result);
     }
 
     /**
@@ -304,7 +318,7 @@ class Report {
      *
      * @param string $format
      * @param string $PaginationMode
-     * @return SSRS_Object_ReportOutput
+     * @return SSRS\Object\ReportOutput
      */
     public function render($format, $deviceInfo = array(), $PaginationMode = 'Estimate') {
         $this->checkSessionId();
@@ -317,7 +331,7 @@ class Report {
         );
 
         $result = $this->getSoapExecution()->Render2($renderParams);
-        return new SSRS_Object_ReportOutput($result);
+        return new ReportOutput($result);
     }
 
     /**
@@ -325,7 +339,7 @@ class Report {
      * @param string $format
      * @param string $streamId
      * @param array $deviceInfo
-     * @return \SSRS_Object_RenderStream
+     * @return \SSRS\Object\RenderStream
      */
     public function renderStream($format, $streamId, $deviceInfo = array()) {
         $this->checkSessionId();
@@ -338,7 +352,7 @@ class Report {
         );
 
         $result = $this->getSoapExecution()->RenderStream($renderParams);
-        return new SSRS_Object_RenderStream($result);
+        return new RenderStream($result);
     }
 
     /**
@@ -346,7 +360,7 @@ class Report {
      * @param string $format
      * @param string $streamId
      * @param array $deviceInfo
-     * @return \SSRS_Object_RenderStream
+     * @return \SSRS\Object\RenderStream
      */
     public function getRenderResource($format, $deviceInfo = array()) {
         $this->checkSessionId();
@@ -359,7 +373,7 @@ class Report {
         );
 
         $result = $this->getSoapExecution()->GetRenderResource($renderParams);
-        return new SSRS_Object_RenderStream($result);
+        return new RenderStream($result);
     }
 
     /**
@@ -368,7 +382,7 @@ class Report {
      */
     public function checkSessionId() {
         if ($this->hasValidSessionId() === false) {
-            throw new SSRS_Report_Exception('Session ID not set');
+            throw new ReportException('Session ID not set');
         }
     }
 
