@@ -9,22 +9,10 @@
  * @license 
  * @version 0.1
  */
-require_once('Soap/NTLM.php');
-require_once('Soap/Exception.php');
-require_once('Object/Abstract.php');
-require_once('Object/ArrayIterator.php');
-require_once('Object/CatalogItems.php');
-require_once('Object/CatalogItem.php');
-require_once('Object/ItemDefinition.php');
-require_once('Object/ExecutionParameters.php');
-require_once('Object/ExecutionInfo.php');
-require_once('Object/Extensions.php');
-require_once('Object/Extension.php');
-require_once('Object/ReportParameter.php');
-require_once('Object/ReportOutput.php');
-require_once('Report/Exception.php');
 
-class SSRS_Report {
+namespace SSRS;
+
+class Report {
 
     public $servicePath = 'ReportService2010.asmx';
     public $executionPath = 'ReportExecution2005.asmx';
@@ -369,7 +357,7 @@ class SSRS_Report {
             'Format' => (string) $format,
             'DeviceInfo' => $this->renderDeviceInfo($deviceInfo),
         );
-        
+
         $result = $this->getSoapExecution()->GetRenderResource($renderParams);
         return new SSRS_Object_RenderStream($result);
     }
