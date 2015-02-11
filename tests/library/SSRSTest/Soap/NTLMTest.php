@@ -106,4 +106,40 @@ class NTLMTest extends \PHPUnit_Framework_TestCase {
                 ->cacheWSDL('$fileContents');
     }
 
+    public function testGenerateHeadersNoData() {
+        $ntlm = new \SSRS\Soap\NTLM('http://');
+        $headers = $ntlm->generateHeaders('http://localhost/reports/');
+
+        $this->assertEquals(array(
+            'Method: GET',
+            'Connection: Keep-Alive',
+            'User-Agent: PHP-SOAP-CURL',
+                ), $headers);
+    }
+
+    public function testGenerateHeadersWithData() {
+        $ntlm = new \SSRS\Soap\NTLM('http://');
+        $headers = $ntlm->generateHeaders('http://localhost/reports/', 'data');
+
+        $this->assertEquals(array(
+            'Method: POST',
+            'Connection: Keep-Alive',
+            'User-Agent: PHP-SOAP-CURL',
+            'Content-Type: text/xml; charset=utf-8',
+            'Content-Length: 4'
+                ), $headers);
+    }
+    
+    public function testGenerateHeadersWithAction() {
+        $ntlm = new \SSRS\Soap\NTLM('http://');
+        $headers = $ntlm->generateHeaders('http://localhost/reports/', null, 'TEST');
+
+        $this->assertEquals(array(
+            'Method: GET',
+            'Connection: Keep-Alive',
+            'User-Agent: PHP-SOAP-CURL',
+            'SOAPAction: "TEST"'
+                ), $headers);
+    }
+
 }

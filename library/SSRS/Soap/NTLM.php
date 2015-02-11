@@ -131,23 +131,12 @@ class NTLM extends \SoapClient {
         curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($handle, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
 
-        $headers = array(
-            'Method: ' . (($data === null) ? 'GET' : 'POST'),
-            'Connection: Keep-Alive',
-            'User-Agent: PHP-SOAP-CURL',
-        );
+        $headers = $this->generateHeaders($url, $data, $action);
+        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 
         if ($data !== null) {
-            $headers[] = 'Content-Type: text/xml; charset=utf-8';
-            $headers[] = 'Content-Length: ' . strlen($data);
             curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
         }
-
-        if ($action !== null) {
-            $headers[] = 'SOAPAction: "' . $action . '"';
-        }
-
-        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 
         $response = curl_exec($handle);
         if ($response === false) {
@@ -172,6 +161,32 @@ class NTLM extends \SoapClient {
 
     public function getLastResponse() {
         return $this->_lastResponse;
+    }
+
+    /**
+     * 
+     * @param string $url
+     * @param mixed $data
+     * @param string $action
+     * @return array
+     */
+    public function generateHeaders($url, $data = null, $action = null) {
+        $headers = array(
+            'Method: ' . (($data === null) ? 'GET' : 'POST'),
+            'Connection: Keep-Alive',
+            'User-Agent: PHP-SOAP-CURL',
+        );
+
+        if ($data !== null) {
+            $headers[] = 'Content-Type: text/xml; charset=utf-8';
+            $headers[] = 'Content-Length: ' . strlen($data);
+        }
+
+        if ($action !== null) {
+            $headers[] = 'SOAPAction: "' . $action . '"';
+        }
+
+        return $headers;
     }
 
 }
