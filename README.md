@@ -22,6 +22,6 @@ See the wiki for information on how to get started!
 
 ```php
 <?php
-$ssrs = new SSRS_Report('http://server/reportserver/', array('username' => 'thomas', 'password' => 'secureme'));
+$ssrs = new \SSRS\Report('http://server/reportserver/', array('username' => 'thomas', 'password' => 'secureme'));
 $ssrs->listChildren('/Report Folder');
 ```
