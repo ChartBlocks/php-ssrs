@@ -128,7 +128,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase {
 
         $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock);
-        $expected = new ReportOutput($testReport);
+        $expected = new \SSRS\Object\ExecutionInfo($testReport);
 
         $result = $ssrs->loadReport('/Reports/Reference_Report');
         $this->assertEquals($expected, $result);
