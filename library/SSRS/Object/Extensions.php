@@ -10,7 +10,7 @@ class Extensions extends ArrayIterator {
         $this->data['Extension'] = array();
     }
 
-    public function setExtensions(stdClass $items) {
+    public function setExtensions(\stdClass $items) {
         foreach ($items->Extension AS $item) {
             $this->addExtension(new Extension($item));
         }

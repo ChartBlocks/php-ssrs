@@ -7,7 +7,7 @@ class RenderStream extends ObjectAbstract {
     public $Result;
     public $MimeType;
 
-    public function __construct(stdClass $stream) {
+    public function __construct(\stdClass $stream) {
         $this->Result = $stream->Result;
         $this->MimeType = $stream->MimeType;
     }

@@ -38,9 +38,9 @@ class ReportParameter extends ObjectAbstract {
     }
 
     public function setValidValues($validValues) {
-        if ($validValues instanceof stdClass && isset($validValues->ValidValue) && is_object($validValues->ValidValue)) {
+        if ($validValues instanceof \stdClass && isset($validValues->ValidValue) && is_object($validValues->ValidValue)) {
             $validValues = array($validValues->ValidValue);
-        } elseif ($validValues instanceof stdClass && isset($validValues->ValidValue)) {
+        } elseif ($validValues instanceof \stdClass && isset($validValues->ValidValue)) {
             $validValues = $validValues->ValidValue;
         }
 
@@ -49,7 +49,6 @@ class ReportParameter extends ObjectAbstract {
             if (is_object($value)) {
                 $data[] = new ValidValue((string) $value->Label, (string) $value->Value);
             } elseif (is_array($value)) {
-                var_dump($value);
                 $data[] = new ValidValue((string) $value['Label'], (string) $value['Value']);
             } else {
                 $data[] = new ValidValue((string) $value, (string) $value);
