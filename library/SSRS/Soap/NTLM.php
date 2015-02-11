@@ -132,7 +132,7 @@ class NTLM extends \SoapClient {
         curl_setopt($handle, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
 
         $headers = array(
-            'Method: ' . ($data === null) ? 'GET' : 'POST',
+            'Method: ' . (($data === null) ? 'GET' : 'POST'),
             'Connection: Keep-Alive',
             'User-Agent: PHP-SOAP-CURL',
         );
