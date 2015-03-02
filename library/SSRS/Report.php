@@ -30,6 +30,7 @@ class Report {
 
     public $servicePath = 'ReportService2010.asmx';
     public $executionPath = 'ReportExecution2005.asmx';
+    public $options;
     protected $_baseUri;
     protected $_username;
     protected $_passwd;
@@ -44,16 +45,28 @@ class Report {
      * @param string $baseUri
      * @param array $options
      */
-    public function __construct($baseUri, $options = array()) {
+    public function __construct($baseUri, array $options = array()) {
         $this->setBaseUri($baseUri);
 
         if (array_key_exists('username', $options)) {
             $this->setUsername($options['username']);
+            unset($options['username']);
         }
 
         if (array_key_exists('password', $options)) {
             $this->setPassword($options['password']);
+            unset($options['password']);
         }
+
+        $this->setOptions($options);
+    }
+
+    public function setOptions(array $options) {
+        $defaults = array(
+            'cache_wsdl_path' => null
+        );
+
+        $this->options = array_merge($defaults, $options);
     }
 
     public function setBaseUri($uri) {
@@ -94,12 +107,7 @@ class Report {
      */
     public function getSoapExecution($runInit = true) {
         if ($this->_soapExecution === null) {
-            $options = array('username' => $this->_username, 'password' => $this->_passwd);
-            $client = new SoapNTLM($this->_baseUri . '/' . $this->executionPath, $options);
-            if ($runInit) {
-                $client->init();
-            }
-
+            $client = $this->createNTLMClient($this->executionPath, $runInit);
             $this->setSoapExecution($client);
         }
 
@@ -114,12 +122,7 @@ class Report {
      */
     public function getSoapService($runInit = true) {
         if ($this->_soapService === null) {
-            $options = array('username' => $this->_username, 'password' => $this->_passwd);
-            $client = new SoapNTLM($this->_baseUri . '/' . $this->servicePath, $options);
-            if ($runInit) {
-                $client->init();
-            }
-
+            $client = $this->createNTLMClient($this->servicePath, $runInit);
             $this->setSoapService($client);
         }
 
@@ -433,6 +436,22 @@ class Report {
         }
 
         return $xml;
+    }
+
+    protected function createNTLMClient($path, $runInit) {
+        $options = array(
+            'username' => $this->_username,
+            'password' => $this->_passwd,
+            'cache_wsdl_path' => $this->options['cache_wsdl_path']
+        );
+
+        $client = new SoapNTLM($this->_baseUri . '/' . $path, $options);
+
+        if ($runInit) {
+            $client->init();
+        }
+
+        return $client;
     }
 
 }

@@ -13,7 +13,7 @@ class NTLM extends \SoapClient {
     protected $_lastResponse;
 
     function __construct($wsdl, $options = array()) {
-        if (!array_key_exists('cache_wsdl_path', $options)) {
+        if (empty($options['cache_wsdl_path'])) {
             $options['cache_wsdl_path'] = '/tmp/' . md5($wsdl) . '.wsdl';
         }
 
@@ -114,9 +114,9 @@ class NTLM extends \SoapClient {
         }
     }
 
-    public function __doRequest($data, $url, $action) {
-        $this->_lastRequest = (string) $data;
-        $this->_lastResponse = $this->callCurl($url, $data, $action);
+    public function __doRequest($request, $location, $action, $version = 1, $one_way = null) {
+        $this->_lastRequest = (string) $request;
+        $this->_lastResponse = $this->callCurl($location, $request, $action);
         return $this->_lastResponse;
     }
 

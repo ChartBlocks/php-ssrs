@@ -20,6 +20,19 @@ class ReportTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($options['username'], $ssrs->getUsername());
         $this->assertEquals($options['password'], $ssrs->getPassword());
+        $this->assertArrayNotHasKey('password', $ssrs->options, 'Password should not remain in options');
+    }
+
+    public function testSetOptions() {
+        $options = array(
+            'cache_wsdl_path' => '/opt/test',
+        );
+
+        $ssrs = new Report('http://test', $options);
+        $this->assertEquals('/opt/test', $ssrs->options['cache_wsdl_path']);
+
+        $ssrs->setOptions(array());
+        $this->assertEquals(null, $ssrs->options['cache_wsdl_path']);
     }
 
     public function testGetSoapServiceReturnsNTLMByDefault() {
@@ -143,7 +156,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase {
                             'Format' => 'HTML4.0',
                             'DeviceInfo' => '<DeviceInfo></DeviceInfo>',
                             'PaginationMode' => 'Estimate'
-                        )));
+        )));
 
         $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock)
@@ -159,7 +172,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase {
                             'Format' => 'CSV',
                             'DeviceInfo' => '<DeviceInfo><Toolbar>true</Toolbar><Recurse><Test>works</Test></Recurse></DeviceInfo>',
                             'PaginationMode' => 'Another'
-                        )));
+        )));
 
         $ssrs = new Report('http://test/ReportServer');
         $ssrs->setSoapExecution($soapMock)
@@ -167,6 +180,5 @@ class ReportTest extends \PHPUnit_Framework_TestCase {
 
         $result = $ssrs->render('CSV', array('Toolbar' => true, 'Recurse' => array('Test' => 'works')), 'Another');
     }
-
 
 }
