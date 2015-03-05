@@ -2,6 +2,8 @@
 
 namespace SSRS\Soap;
 
+use RuntimeException;
+
 class NTLM extends \SoapClient {
 
     protected $_uri;
@@ -73,18 +75,18 @@ class NTLM extends \SoapClient {
         return $this;
     }
 
-    public function setCachePath($path) {
-        $folder = dirname($path);
+    public function setCachePath($file) {
+        $folder = dirname($file);
 
-        if (!is_dir($folder)) {
-            throw new Exception('WSDL cache path is not valid');
+        if (file_exists($file) && false === is_writable($file)) {
+            throw new RuntimeException("WSDL cache file not writeable");
+        } elseif (false === is_dir($folder)) {
+            throw new RuntimeException("WSDL cache parent folder does not exist");
+        } elseif (false === is_writeable($folder)) {
+            throw new RuntimeException("WSDL cache parent folder not writeable");
         }
 
-        if (!is_writeable($folder)) {
-            throw new Exception('WSDL cache path not writeable');
-        }
-
-        $this->_cachePath = $path;
+        $this->_cachePath = $file;
         return $this;
     }
 
