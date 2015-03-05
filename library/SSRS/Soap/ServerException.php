@@ -9,7 +9,7 @@ class ServerException extends \Exception {
     public $faultactor;
 
     static function fromResponse($string) {
-        $xml = new SimpleXMLElement($string);
+        $xml = new \SimpleXMLElement($string);
         $ns = $xml->getNamespaces(true);
 
         $soap = $xml->children($ns['soap']);

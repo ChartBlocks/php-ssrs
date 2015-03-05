@@ -1,6 +1,6 @@
 <?php
 
-use SSRS\Object;
+namespace SSRS\Object;
 
 class ExecutionParameters extends ArrayIterator {
 
