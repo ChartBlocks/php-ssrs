@@ -181,7 +181,6 @@ class NTLM extends \SoapClient {
 
         if ($data !== null) {
             $headers[] = 'Content-Type: text/xml; charset=utf-8';
-            $headers[] = 'Content-Length: ' . strlen($data);
         }
 
         if ($action !== null) {
