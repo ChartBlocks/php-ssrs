@@ -54,7 +54,7 @@ class NTLMTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \SSRS\Soap\Exception
+     * @expectedException \RuntimeException
      */
     public function testSetCacheThrowsExceptionWithInvalidPath() {
         vfsStreamWrapper::register();
