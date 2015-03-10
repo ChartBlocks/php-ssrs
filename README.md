@@ -3,12 +3,26 @@ php-ssrs
 
 PHP library for connecting to SSRS over SOAP
 
+Requirements
+-------------------
+
+Although it isn't mandatory to use Composer, without it you will need to set up autoloading or require the invidual classes manually. We *highly* recommend you install php-ssrs using Composer, its easy to get started: https://getcomposer.org/
+
+Dependencies:
+* PHP5.4
+* PHP curl module (on ubuntu, its `sudo apt-get install php5-curl`)
+
+
 Installation / Usage
 --------------------
 
-The easiest way to use php-ssrs is to install it with composer. If you don't want to use composer, you can download the project and autoload it manually.
+The easiest way to use php-ssrs is to install it with composer. To include the library in to your project using composer, run the following command:
 
-To include the library in to your project using composer, add the following to your composer.json file:
+```
+$ php composer.phar require chartblocks/php-ssrs:~1.0.
+```
+
+OR add the following to your composer.json file:
 
 ```json
 {
