@@ -181,4 +181,48 @@ class ReportTest extends \PHPUnit_Framework_TestCase {
         $result = $ssrs->render('CSV', array('Toolbar' => true, 'Recurse' => array('Test' => 'works')), 'Another');
     }
 
+    public function testSetExecutionParametersAsArray() {
+        $params = array(
+            'page' => 1
+        );
+
+        $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportExecution2005.wsdl', 'SoapClientMockRender2');
+        $soapMock->expects($this->once())
+                ->method('SetExecutionParameters')
+                ->with($this->equalTo(array(
+                            'Parameters' => array(
+                                array('Name' => 'page', 'Value' => 1),
+                            ),
+                            'ParameterLanguage' => 'en-us',
+        )));
+
+        $ssrs = new Report('http://test/ReportServer');
+        $ssrs->setSoapExecution($soapMock)
+                ->setSessionId('test');
+
+        $ssrs->setExecutionParameters($params);
+    }
+
+    public function testSetExecutionParametersAsClass() {
+        $params = new \SSRS\Object\ExecutionParameters(array(
+            'page' => 1
+        ));
+
+        $soapMock = $this->getMockFromWsdl(dirname(__FILE__) . '/ReportTest/ReportExecution2005.wsdl', 'SoapClientMockRender2');
+        $soapMock->expects($this->once())
+                ->method('SetExecutionParameters')
+                ->with($this->equalTo(array(
+                            'Parameters' => array(
+                                array('Name' => 'page', 'Value' => 1),
+                            ),
+                            'ParameterLanguage' => 'en-us',
+        )));
+
+        $ssrs = new Report('http://test/ReportServer');
+        $ssrs->setSoapExecution($soapMock)
+                ->setSessionId('test');
+
+        $ssrs->setExecutionParameters($params);
+    }
+
 }
