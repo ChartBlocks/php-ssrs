@@ -115,6 +115,8 @@ class NTLMTest extends \PHPUnit_Framework_TestCase {
             'Connection: Keep-Alive',
             'User-Agent: PHP-SOAP-CURL',
                 ), $headers);
+
+        $this->assertArrayNotHasKey('Content-Length', $headers, 'Should not have content length');
     }
 
     public function testGenerateHeadersWithData() {
@@ -126,10 +128,11 @@ class NTLMTest extends \PHPUnit_Framework_TestCase {
             'Connection: Keep-Alive',
             'User-Agent: PHP-SOAP-CURL',
             'Content-Type: text/xml; charset=utf-8',
-            'Content-Length: 4'
                 ), $headers);
+
+        $this->assertArrayNotHasKey('Content-Length', $headers, 'Should not have content length');
     }
-    
+
     public function testGenerateHeadersWithAction() {
         $ntlm = new \SSRS\Soap\NTLM('http://');
         $headers = $ntlm->generateHeaders('http://localhost/reports/', null, 'TEST');
@@ -140,6 +143,8 @@ class NTLMTest extends \PHPUnit_Framework_TestCase {
             'User-Agent: PHP-SOAP-CURL',
             'SOAPAction: "TEST"'
                 ), $headers);
+
+        $this->assertArrayNotHasKey('Content-Length', $headers, 'Should not have content length');
     }
 
 }
