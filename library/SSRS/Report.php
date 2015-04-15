@@ -304,16 +304,30 @@ class Report {
      * @param string $id
      * @return SSRS\Object\ExecutionInfo
      */
-    public function setExecutionParameters(ExecutionParameters $parameters, $parameterLanguage = 'en-us') {
+    public function setExecutionParameters($parameters, $parameterLanguage = 'en-us') {
+        $executionParameters = $this->factoryParameters($parameters);
+
         $this->checkSessionId();
 
         $options = array(
-            'Parameters' => $parameters->getParameterArrayForSoapCall(),
+            'Parameters' => $executionParameters->getParameterArrayForSoapCall(),
             'ParameterLanguage' => $parameterLanguage,
         );
 
         $result = $this->getSoapExecution()->SetExecutionParameters($options);
         return new ExecutionInfo($result);
+    }
+
+    protected function factoryParameters($parameters) {
+        if (is_array($parameters)) {
+            $parameters = new ExecutionParameters($parameters);
+        }
+
+        if (false === $parameters instanceof ExecutionParameters) {
+            throw new InvalidArgumentException('Invalid execution parameters argument provided');
+        }
+
+        return $parameters;
     }
 
     /**
