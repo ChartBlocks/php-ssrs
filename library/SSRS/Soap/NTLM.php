@@ -142,7 +142,7 @@ class NTLM extends \SoapClient {
 
         $response = curl_exec($handle);
         if ($response === false) {
-            throw new \SSRS\Soap\Exception('CURL error: ' . curl_error($handle), curl_errno($handle));
+            throw new Exception('CURL error: ' . curl_error($handle), curl_errno($handle));
         }
 
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
