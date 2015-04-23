@@ -15,6 +15,10 @@ class CachedStreamResource {
     }
 
     public function read() {
+        if (false === file_exists($this->filePath)) {
+            throw new HttpUserException('Resource file not found', 404);
+        }
+
         $data = file_get_contents($this->filePath);
         $parts = explode("\n", $data, 2);
 
