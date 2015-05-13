@@ -13,6 +13,7 @@ class NTLM extends \SoapClient {
     protected $_cacheExpiry;
     protected $_lastRequest;
     protected $_lastResponse;
+    protected $_curloptCaInfo;
 
     function __construct($wsdl, $options = array()) {
         if (empty($options['cache_wsdl_path'])) {
@@ -29,6 +30,7 @@ class NTLM extends \SoapClient {
 
         $this->setUri($wsdl);
         $this->setCachePath($options['cache_wsdl_path']);
+        $this->setCurlOptCaInfo($options['curlopt_cainfo']);
     }
 
     public function init() {
@@ -115,6 +117,15 @@ class NTLM extends \SoapClient {
             $this->cacheWSDL($wsdlContent);
         }
     }
+    
+    public function setCurlOptCaInfo($ca_info) {
+    	$this->_curloptCaInfo = $ca_info;
+    }
+    
+    public function getCurlOptCaInfo() {
+    	return $this->_curloptCaInfo;
+    }
+    
 
     public function __doRequest($request, $location, $action, $version = 1, $one_way = null) {
         $this->_lastRequest = (string) $request;
@@ -132,6 +143,15 @@ class NTLM extends \SoapClient {
         curl_setopt($handle, CURLOPT_USERPWD, $this->_username . ':' . $this->_passwd);
         curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($handle, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
+        
+        //SSL
+        if ($this->getCurlOptCaInfo() !== null) {
+        	print "here";
+        	curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, true);
+        	curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2);
+        	curl_setopt($handle, CURLOPT_CAINFO, $this->getCurlOptCaInfo());
+        }
+        
 
         $headers = $this->generateHeaders($url, $data, $action);
         curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
