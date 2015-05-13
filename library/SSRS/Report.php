@@ -456,7 +456,8 @@ class Report {
         $options = array(
             'username' => $this->_username,
             'password' => $this->_passwd,
-            'cache_wsdl_path' => $this->options['cache_wsdl_path']
+            'cache_wsdl_path' => $this->options['cache_wsdl_path'],
+        	'curlopt_cainfo' => isset($this->options['curlopt_cainfo']) ? $this->options['curlopt_cainfo'] : null,  
         );
 
         $client = new SoapNTLM($this->_baseUri . '/' . $path, $options);
