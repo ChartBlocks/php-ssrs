@@ -13,6 +13,7 @@ class NTLM extends \SoapClient {
     protected $_cacheExpiry;
     protected $_lastRequest;
     protected $_lastResponse;
+    protected $_curlOptions;
 
     function __construct($wsdl, $options = array()) {
         if (empty($options['cache_wsdl_path'])) {
@@ -29,6 +30,7 @@ class NTLM extends \SoapClient {
 
         $this->setUri($wsdl);
         $this->setCachePath($options['cache_wsdl_path']);
+        $this->setCurlOptions($options['curl_options']);
     }
 
     public function init() {
@@ -115,6 +117,15 @@ class NTLM extends \SoapClient {
             $this->cacheWSDL($wsdlContent);
         }
     }
+    
+    public function setCurlOptions($curl_options) {
+    	$this->_curlOptions = $curl_options;
+    }
+    
+    public function getCurlOptions() {
+    	return $this->_curlOptions;
+    }
+    
 
     public function __doRequest($request, $location, $action, $version = 1, $one_way = null) {
         $this->_lastRequest = (string) $request;
@@ -132,6 +143,11 @@ class NTLM extends \SoapClient {
         curl_setopt($handle, CURLOPT_USERPWD, $this->_username . ':' . $this->_passwd);
         curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($handle, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
+        
+        //set additional curl options
+        foreach ($this->getCurlOptions() as $key => $value) {
+        	curl_setopt($handle, $key, $value);
+        }
 
         $headers = $this->generateHeaders($url, $data, $action);
         curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
