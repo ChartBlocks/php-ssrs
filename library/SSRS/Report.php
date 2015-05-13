@@ -63,7 +63,8 @@ class Report {
 
     public function setOptions(array $options) {
         $defaults = array(
-            'cache_wsdl_path' => null
+            'cache_wsdl_path' => null,
+        	'curl_options' => null,
         );
 
         $this->options = array_merge($defaults, $options);
@@ -456,7 +457,8 @@ class Report {
         $options = array(
             'username' => $this->_username,
             'password' => $this->_passwd,
-            'cache_wsdl_path' => $this->options['cache_wsdl_path']
+            'cache_wsdl_path' => $this->options['cache_wsdl_path'],
+        	'curl_options' => $this->options['curl_options'],
         );
 
         $client = new SoapNTLM($this->_baseUri . '/' . $path, $options);
