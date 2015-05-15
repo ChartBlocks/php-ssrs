@@ -95,8 +95,24 @@ class ReportParameter extends ObjectAbstract {
      *
      * @return bool 
      */
+    public function hasMissingValidValue() {
+        return ($this->getState() == 'MissingValidValue');
+    }
+
+    /**
+     *
+     * @return bool 
+     */
     public function getState() {
         return key_exists('State', $this->data) ? $this->data['State'] : null;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getType() {
+        return $this->data['Type'];
     }
 
     /**
@@ -113,6 +129,14 @@ class ReportParameter extends ObjectAbstract {
      */
     public function isSelect() {
         return ($this->isMultiValue() || (!empty($this->data['ValidValues']) && is_array($this->data['ValidValues']) && count($this->data['ValidValues']) > 0));
+    }
+
+    /**
+     * 
+     * @return bool
+     */
+    public function isAllowBlank() {
+        return $this->data['AllowBlank'];
     }
 
 }

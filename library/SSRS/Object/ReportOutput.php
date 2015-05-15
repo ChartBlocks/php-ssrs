@@ -11,7 +11,9 @@ class ReportOutput extends ObjectAbstract {
         $this->verifyCachePath($localCachePath);
 
         $rootPath = rtrim($localCachePath, '/');
-        foreach ($this->StreamIds->string as $streamId) {
+
+        $streamIds = $this->getStreamIds();
+        foreach ($streamIds as $streamId) {
             $path = $rootPath . '/' . $streamId;
             $stream = $report->renderStream($format, $streamId);
 
@@ -20,6 +22,10 @@ class ReportOutput extends ObjectAbstract {
         }
 
         return $this;
+    }
+
+    public function getStreamIds() {
+        return is_array($this->StreamIds->string) ? $this->StreamIds->string : array($this->StreamIds->string);
     }
 
     public function download($filename) {

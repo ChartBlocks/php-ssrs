@@ -20,5 +20,12 @@
         "psr-0": {
             "SSRS\\": "library/"
         }
+    },
+    "suggest": {
+        "zendframework/zend-escaper": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-form": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-i18n": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-servicemanager": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-view": "Required for rendering forms with ZendFramework2"
     }
 }

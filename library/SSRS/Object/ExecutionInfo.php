@@ -84,6 +84,40 @@ class ExecutionInfo extends ObjectAbstract {
         return null;
     }
 
+    public function hasOutstandingDependencies() {
+        $parameters = $this->getReportParameters();
+        foreach ($parameters AS $parameter) {
+            if ($parameter->hasOutstandingDependencies()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasMissingValidValues() {
+        $parameters = $this->getReportParameters();
+        foreach ($parameters AS $parameter) {
+            if ($parameter->hasMissingValidValue()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function canRender() {
+        if ($this->hasOutstandingDependencies()) {
+            return false;
+        }
+
+        if ($this->hasMissingValidValues()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function __sleep() {
         $this->executionInfo = null;
         return array('data');
