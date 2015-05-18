@@ -13,4 +13,6 @@ interface AdapterInterface {
     public function getHTML();
 
     public function validate($data);
+
+    public function addCSRFElement($name, $value);
 }

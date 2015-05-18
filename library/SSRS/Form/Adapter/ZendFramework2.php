@@ -94,6 +94,14 @@ class ZendFramework2 extends AbstractAdapter {
         return $this;
     }
 
+    public function addCSRFElement($name, $value) {
+        $csrf = new \Zend\Form\Element\Hidden($name);
+        $csrf->setValue($value);
+
+        $this->form->add($csrf);
+        return $this;
+    }
+
     public function getUserParameters() {
         return array_filter($this->executionInfo->getReportParameters(), function(ReportParameter $parameter) {
             return ($parameter->data['PromptUser'] && false === empty($parameter->data['Prompt']));
