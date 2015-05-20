@@ -65,6 +65,7 @@ class Report {
         $defaults = array(
             'cache_wsdl_path' => null,
             'curl_options' => array(),
+            'hijackActionUrls' => false
         );
 
         $this->options = array_merge($defaults, $options);
@@ -340,16 +341,22 @@ class Report {
      */
     public function render($format, $deviceInfo = array(), $PaginationMode = 'Estimate') {
         $this->checkSessionId();
-        $deviceInfo = array('DeviceInfo' => $deviceInfo);
+
+        $deviceInfoDefaults = array();
+        if ($this->options['hijackActionUrls']) {
+            $deviceInfoDefaults['ReplacementRoot'] = '//php-ssrs//';
+        }
+
+        $deviceInfoTree = array('DeviceInfo' => array_merge($deviceInfoDefaults, $deviceInfo));
 
         $renderParams = array(
             'Format' => $format,
-            'DeviceInfo' => $this->renderDeviceInfo($deviceInfo),
+            'DeviceInfo' => $this->renderDeviceInfo($deviceInfoTree),
             'PaginationMode' => $PaginationMode
         );
 
         $result = $this->getSoapExecution()->Render2($renderParams);
-        return new ReportOutput($result);
+        return new ReportOutput($result, $this->getExecutionInfo());
     }
 
     /**

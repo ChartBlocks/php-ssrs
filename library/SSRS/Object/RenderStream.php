@@ -14,6 +14,11 @@ class RenderStream extends ObjectAbstract {
         }
     }
 
+    public function send() {
+        header('Content-Type: ' . $this->MimeType);
+        echo $this->Result;
+    }
+
     public function __toString() {
         return $this->Result;
     }

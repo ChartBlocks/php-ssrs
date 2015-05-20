@@ -4,8 +4,14 @@ namespace SSRS\Object;
 
 use SSRS\Report;
 use SSRS\Report\CachedStreamResource;
+use SSRS\Object\ExecutionInfo;
 
 class ReportOutput extends ObjectAbstract {
+
+    public function __construct($data = null, ExecutionInfo $executionInfo = null) {
+        parent::__construct($data);
+        $this->executionInfo = $executionInfo;
+    }
 
     public function preCacheStreams(Report $report, $localCachePath, $format = 'HTML4.0') {
         $this->verifyCachePath($localCachePath);
@@ -42,8 +48,23 @@ class ReportOutput extends ObjectAbstract {
         exit(0);
     }
 
+    public function resultClean() {
+        $output = (string) $this->Result;
+        $clean = $this->convertReplacementRootUrls($output);
+
+        return $clean;
+    }
+
+    protected function convertReplacementRootUrls($output) {
+        $executionId = ($this->executionInfo) ? $this->executionInfo->getExecutionId() : null;
+
+        return preg_replace_callback('#href="//php-ssrs//([^\?]+)([^"]+)"#', function($results) use($executionId) {
+            return 'href="' . html_entity_decode(urldecode($results[2])) . '&executionId=' . $executionId . '"';
+        }, $output);
+    }
+
     public function __toString() {
-        return (string) $this->Result;
+        return $this->resultClean();
     }
 
     protected function verifyCachePath($path) {

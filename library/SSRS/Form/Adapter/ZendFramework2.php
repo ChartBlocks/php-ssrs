@@ -48,7 +48,7 @@ class ZendFramework2 extends AbstractAdapter {
         foreach ($this->form->getElements() as $key => $element) {
             $html .= '<div id="' . $key . '" class="element">';
             $html .= $formRow->render($element);
-            $html .= '</div>';
+            $html .= '</div>' . PHP_EOL;
         }
 
         $html .= $formRenderer->closeTag();

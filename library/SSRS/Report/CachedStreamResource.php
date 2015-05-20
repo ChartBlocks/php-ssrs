@@ -39,9 +39,8 @@ class CachedStreamResource {
 
     public function send() {
         $stream = $this->read();
-
-        header('Content-Type: ' . $stream->MimeType);
-        echo $stream->Result;
+        $stream->send();
+        return $this;
     }
 
 }
