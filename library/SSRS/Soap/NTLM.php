@@ -17,8 +17,11 @@ class NTLM extends \SoapClient {
 
     function __construct($wsdl, $options = array()) {
         if (empty($options['cache_wsdl_path'])) {
-            $options['cache_wsdl_path'] = '/tmp/' . md5($wsdl) . '.wsdl';
+            $options['cache_wsdl_path'] = sys_get_temp_dir();
         }
+        if(!preg_match('/'.preg_quote(DIRECTORY_SEPARATOR, '/').'$/', $options['cache_wsdl_path']))
+            $options['cache_wsdl_path'] .= DIRECTORY_SEPARATOR;
+        $options['cache_wsdl_path'] .= md5($wsdl) . '.wsdl';
 
         if (array_key_exists('username', $options)) {
             $this->setUsername($options['username']);
