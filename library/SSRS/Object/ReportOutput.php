@@ -31,6 +31,10 @@ class ReportOutput extends ObjectAbstract {
     }
 
     public function getStreamIds() {
+        if(empty($this->StreamIds->string)){
+            return array();
+        }
+
         $ids = is_array($this->StreamIds->string) ? $this->StreamIds->string : array($this->StreamIds->string);
         return array_filter($ids);
     }
