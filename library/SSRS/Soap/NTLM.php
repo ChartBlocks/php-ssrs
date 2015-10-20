@@ -87,8 +87,10 @@ class NTLM extends \SoapClient {
             throw new RuntimeException("WSDL cache file not writeable");
         } elseif (false === is_dir($folder)) {
             throw new RuntimeException("WSDL cache parent folder does not exist");
-        } elseif (false === is_writeable($folder)) {
+        } elseif (touch($folder.DIRECTORY_SEPARATOR.'test') === false) {
             throw new RuntimeException("WSDL cache parent folder not writeable");
+        } else {
+            unlink($folder . DIRECTORY_SEPARATOR . 'test');
         }
 
         $this->_cachePath = $file;
