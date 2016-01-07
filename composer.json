@@ -1,6 +1,6 @@
 {
-    "name": "breakoutbox/php-ssrs",
-    "description": "PHP library for connecting to SSRS SOAP (fork)",
+    "name": "chartblocks/php-ssrs",
+    "description": "PHP library for connecting to SSRS SOAP",
     "license": "MIT",
     "authors": [
         {
