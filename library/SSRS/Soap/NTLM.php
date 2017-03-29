@@ -17,8 +17,11 @@ class NTLM extends \SoapClient {
 
     function __construct($wsdl, $options = array()) {
         if (empty($options['cache_wsdl_path'])) {
-            $options['cache_wsdl_path'] = '/tmp/' . md5($wsdl) . '.wsdl';
+            $options['cache_wsdl_path'] = sys_get_temp_dir();
         }
+        if(!preg_match('/'.preg_quote(DIRECTORY_SEPARATOR, '/').'$/', $options['cache_wsdl_path']))
+            $options['cache_wsdl_path'] .= DIRECTORY_SEPARATOR;
+        $options['cache_wsdl_path'] .= md5($wsdl) . '.wsdl';
 
         if (empty($options['cache_wsdl_expiry'])) {
             $options['cache_wsdl_expiry'] = 86400;
@@ -89,8 +92,10 @@ class NTLM extends \SoapClient {
             throw new RuntimeException("WSDL cache file not writeable");
         } elseif (false === is_dir($folder)) {
             throw new RuntimeException("WSDL cache parent folder does not exist");
-        } elseif (false === is_writeable($folder)) {
+        } elseif (touch($folder.DIRECTORY_SEPARATOR.'test') === false) {
             throw new RuntimeException("WSDL cache parent folder not writeable");
+        } else {
+            unlink($folder . DIRECTORY_SEPARATOR . 'test');
         }
 
         $this->_cachePath = $file;
