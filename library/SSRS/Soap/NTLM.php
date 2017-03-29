@@ -17,7 +17,8 @@ class NTLM extends \SoapClient {
 
     function __construct($wsdl, $options = array()) {
         if (empty($options['cache_wsdl_path'])) {
-            $options['cache_wsdl_path'] = '/tmp/' . md5($wsdl) . '.wsdl';
+            $tmpDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
+            $options['cache_wsdl_path'] = $tmpDir . DIRECTORY_SEPARATOR . md5($wsdl) . '.wsdl';
         }
 
         if (empty($options['cache_wsdl_expiry'])) {
