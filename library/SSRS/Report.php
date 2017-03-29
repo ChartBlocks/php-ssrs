@@ -64,6 +64,7 @@ class Report {
     public function setOptions(array $options) {
         $defaults = array(
             'cache_wsdl_path' => null,
+            'cache_wsdl_expiry' => 86400,
             'curl_options' => array(),
             'hijackActionUrls' => false
         );
@@ -465,6 +466,7 @@ class Report {
             'username' => $this->_username,
             'password' => $this->_passwd,
             'cache_wsdl_path' => $this->options['cache_wsdl_path'],
+            'cache_wsdl_expiry' => $this->options['cache_wsdl_expiry'],
             'curl_options' => $this->options['curl_options'],
         );
 

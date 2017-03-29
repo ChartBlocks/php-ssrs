@@ -20,6 +20,10 @@ class NTLM extends \SoapClient {
             $options['cache_wsdl_path'] = '/tmp/' . md5($wsdl) . '.wsdl';
         }
 
+        if (empty($options['cache_wsdl_expiry'])) {
+            $options['cache_wsdl_expiry'] = 86400;
+        }
+
         if (array_key_exists('username', $options)) {
             $this->setUsername($options['username']);
         }
@@ -30,6 +34,7 @@ class NTLM extends \SoapClient {
 
         $this->setUri($wsdl);
         $this->setCachePath($options['cache_wsdl_path']);
+        $this->setCacheExpiry($options['cache_wsdl_expiry']);
         $this->setCurlOptions($options['curl_options']);
     }
 
