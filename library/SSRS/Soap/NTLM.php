@@ -16,11 +16,6 @@ class NTLM extends \SoapClient {
     protected $_curlOptions = array();
 
     function __construct($wsdl, $options = array()) {
-        if (empty($options['cache_wsdl_path'])) {
-            $tmpDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
-            $options['cache_wsdl_path'] = $tmpDir . DIRECTORY_SEPARATOR . md5($wsdl) . '.wsdl';
-        }
-
         if (empty($options['cache_wsdl_expiry'])) {
             $options['cache_wsdl_expiry'] = 86400;
         }
@@ -33,8 +28,11 @@ class NTLM extends \SoapClient {
             $this->setPassword($options['password']);
         }
 
+        $cacheBasePath = rtrim(empty($options['cache_wsdl_path'])? sys_get_temp_dir() : $options['cache_wsdl_path'], DIRECTORY_SEPARATOR);
+        $cacheFilePath = $cacheBasePath . DIRECTORY_SEPARATOR . md5($wsdl) . '.wsdl';
+
         $this->setUri($wsdl);
-        $this->setCachePath($options['cache_wsdl_path']);
+        $this->setCachePath($cacheFilePath);
         $this->setCacheExpiry($options['cache_wsdl_expiry']);
         $this->setCurlOptions($options['curl_options']);
     }
