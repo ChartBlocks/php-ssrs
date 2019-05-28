@@ -165,10 +165,12 @@ class NTLM extends \SoapClient {
         }
 
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if ($httpCode >= 300 && $httpCode <= 600) {
-            throw ServerException::fromResponse($response);
-        } else if ($httpCode !== 200) {
-            throw new Exception('HTTP error: ' . $httpCode . ' ' . $response, $httpCode, $response);
+        if ($httpCode !== 200) {
+            if ($response !== '' && $httpCode >= 300 && $httpCode <= 600) {
+                throw ServerException::fromResponse($response);
+            } else {
+                throw new Exception('HTTP error: ' . $httpCode . ' ' . $response, $httpCode, $response);
+            }
         }
         curl_close($handle);
 

@@ -27,5 +27,10 @@
         "zendframework/zend-i18n": "Required for rendering forms with ZendFramework2",
         "zendframework/zend-servicemanager": "Required for rendering forms with ZendFramework2",
         "zendframework/zend-view": "Required for rendering forms with ZendFramework2"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
