@@ -303,9 +303,9 @@ class Report {
      * Pass details from 'LoadReport' method to set the search parameters.
      * Requires the Session/Execution ID to be set.
      *
-     * @param SSRS\Object\ExecutionParameters $request
+     * @param \SSRS\Object\ExecutionParameters $request
      * @param string $id
-     * @return SSRS\Object\ExecutionInfo
+     * @return \SSRS\Object\ExecutionInfo
      */
     public function setExecutionParameters($parameters, $parameterLanguage = 'en-us') {
         $executionParameters = $this->factoryParameters($parameters);
@@ -338,7 +338,7 @@ class Report {
      *
      * @param string $format
      * @param string $PaginationMode
-     * @return SSRS\Object\ReportOutput
+     * @return \SSRS\Object\ReportOutput
      */
     public function render($format, $deviceInfo = array(), $PaginationMode = 'Estimate') {
         $this->checkSessionId();
