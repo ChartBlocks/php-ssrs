@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-      "php": ">=5.3",
+      "php": ">8.0",
       "ext-curl": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7.",
-        "mikey179/vfsStream": "*"
+        "mikey179/vfsstream": "*"
     },
     "autoload": {
         "psr-0": {
