@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-      "php": ">=5.3",
+      "php": ">8.0",
       "ext-curl": "*"
     },
     "require-dev": {

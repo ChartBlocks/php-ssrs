@@ -11,28 +11,28 @@ class ArrayIterator extends ObjectAbstract implements \Iterator {
 
     public $iteratorKey = 'Array';
 
-    public function next() {
-        return next($this->data[$this->iteratorKey]);
+    public function next(): void {
+        next($this->data[$this->iteratorKey]);
     }
 
     public function prev() {
         return prev($this->data[$this->iteratorKey]);
     }
 
-    public function key() {
+    public function key(): mixed {
         return key($this->data[$this->iteratorKey]);
     }
 
-    public function current() {
+    public function current(): mixed {
         return current($this->data[$this->iteratorKey]);
     }
 
-    public function valid() {
+    public function valid(): bool {
         return isset($this->data[$this->iteratorKey][$this->key()]);
     }
 
-    public function rewind() {
-        return reset($this->data[$this->iteratorKey]);
+    public function rewind(): void {
+        reset($this->data[$this->iteratorKey]);
     }
 
 }

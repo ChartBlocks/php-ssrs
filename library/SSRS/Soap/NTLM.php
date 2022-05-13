@@ -130,7 +130,7 @@ class NTLM extends \SoapClient {
         return $this->_curlOptions;
     }
 
-    public function __doRequest($request, $location, $action, $version = 1, $one_way = null) {
+    public function __doRequest($request, $location, $action, $version = 1, $one_way = null): ?string {
         $this->_lastRequest = (string) $request;
         $this->_lastResponse = $this->callCurl($location, $request, $action);
         return $this->_lastResponse;
